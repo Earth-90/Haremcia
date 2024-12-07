@@ -54,8 +54,9 @@ button:hover {
 
 .terminal-body {
     padding: 10px;
+    line-height: 1.2;
     color: #0f0;
-    font-size: 12px;
+    font-size: 15px;
     max-height: 250px;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -68,7 +69,6 @@ button:hover {
     background: none;
     border: none;
     color: #0f0;
-    font-size: 13px;
     outline: none;
 }
 
