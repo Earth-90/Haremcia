@@ -10,46 +10,35 @@ document.getElementById('unlock-btn').addEventListener('click', function() {
     document.getElementById('terminal').classList.remove('hidden');
     document.getElementById('terminal-input').focus();
 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>Accesing Terminal.</p>`;
-    }, 100); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>Accesing Terminal..</p>`;
-    }, 300); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>Accesing Terminal...</p>`;
-    }, 500); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>[User] : Director</p>`;
-        terminalOutput.innerHTML += `<p>[Password] : ✲✲✲✲✲✲✲✲✲</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 1000); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>Connecting.</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 1200); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>Connecting..</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 1400); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>Connecting...</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 1500); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>[Acces Granted]</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 2100); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>[LOG ACCESSIBLE]</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 2300); 
-    setTimeout(function() {
-        terminalOutput.innerHTML += `<p>log_001 | log_002 | log_003 | log_004</p>`;
-        terminalOutput.innerHTML += `<p>log_005 | log_006 | log_███ | log_███</p>`;
-        terminalOutput.innerHTML += `<p>Please select a log :</p>`;
-        scrollableArea.scrollTop = scrollableArea.scrollHeight;
-    }, 2500); 
+    const audio = new Audio('sons/computer.mp3');
+    console.log('Son joué');
+    audio.play();
+
+    // Afficher le texte lettre par lettre avec saut de ligne
+    const messages = [
+        "Accessing Terminal.",
+        "Accessing Terminal..",
+        "Accessing Terminal...",
+        "[User] : Director",
+        "[Password] : ✲✲✲✲✲✲✲✲✲",
+        "Connecting.",
+        "Connecting..",
+        "Connecting...",
+        "[Access Granted]",
+        "[LOG ACCESSIBLE]",
+        "log_001 | log_002 | log_003 | log_004",
+        "log_005 | log_006 | log_███ | log_███",
+        "Please select a log :"
+    ];
+
+    let messageIndex = 0;
+    function showNextMessage() {
+        if (messageIndex < messages.length) {
+            typeMessage(messages[messageIndex], terminalOutput, showNextMessage);
+            messageIndex++;
+        }
+    }
+    showNextMessage();
 });
 
 document.getElementById('terminal-input').addEventListener('keydown', function(e) {
@@ -61,17 +50,18 @@ document.getElementById('terminal-input').addEventListener('keydown', function(e
 
         if (command.startsWith('log_')) {
             if (last_command.startsWith('log_')) {
-                terminalOutput.innerHTML += `<p>Closing ${last_command}...</p>`;
+                typeMessage(`Closing ${last_command}...`, terminalOutput);
             }
-            last_command = command
-            terminalOutput.innerHTML += `<p>Opening ${command}...</p>`;
-            openLog(command);
+            last_command = command;
+            typeMessage(`Opening ${command}...`, terminalOutput, () => {
+                openLog(command);
+            });
         } else {
-            terminalOutput.innerHTML += `<p>ERROR [${command}]</p>`;
+            typeMessage(`ERROR [${command}]`, terminalOutput);
         }
 
         scrollableArea.scrollTop = scrollableArea.scrollHeight;
-        }
+    }
 });
 
 function openLog(modalId) {
@@ -93,14 +83,12 @@ function openLog(modalId) {
             currentModal = null; // Réinitialiser lorsque le modal est fermé
         });
     } else {
-        const terminalOutput = document.getElementById('terminal-output');
-        terminalOutput.innerHTML += `<p>Aucun LOG trouvé pour : ${modalId}</p>`;
-        last_command = ''
+        typeMessage(`Aucun LOG trouvé pour : ${modalId}`, terminalOutput);
+        last_command = '';
     }
 
     scrollableArea.scrollTop = scrollableArea.scrollHeight;
 }
-
 
 // Sélection des éléments
 const openArchiveBtn = document.getElementById('openArchiveBtn');
@@ -123,10 +111,12 @@ closeArchiveBtn.addEventListener('click', () => {
     openArchiveBtn.classList.remove('hidden');
 });
 
-document.querySelectorAll('.folder-btn').forEach(button => {
+folderButtons.forEach(button => {
     button.addEventListener('click', function() {
         const archiveId = this.getAttribute('data-archive');
-        OpenArch(archiveId);
+        typeMessage(`Opening archive ${archiveId}...`, document.getElementById('terminal-output'), () => {
+            OpenArch(archiveId);
+        });
     });
 });
 
@@ -152,3 +142,18 @@ function OpenArch(ArchId) {
 closeContentBtn.addEventListener('click', () => {
     selectedArchiveDiv.classList.add('hidden');
 });
+
+// Fonction pour afficher un texte lettre par lettre avec saut de ligne
+function typeMessage(text, outputElement, callback) {
+    let charIndex = 0;
+    const intervalId = setInterval(() => {
+        if (charIndex < text.length) {
+            outputElement.innerHTML += text.charAt(charIndex);
+            charIndex++;
+        } else {
+            clearInterval(intervalId);
+            outputElement.innerHTML += '<br>'; // Ajouter un saut de ligne après le message
+            if (callback) callback();
+        }
+    }, 35); // Délai entre chaque caractère
+}
