@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'MONO';
+  src: url('font/MONO.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}  
+
+nav {
+  font-family: 'MONO';
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  padding: 0px 20px;
+  padding-bottom: 10px;
+  transition: opacity 0.3s ease;
+  height: 80px;
+  overflow: hidden;
+}
+
+/* Menu Icon */
+.menu-icon img {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.3s ease-in-out; /* Smooth rotation */
+}
+
+nav.expanded .menu-icon img {
+  transform: rotate(180deg); /* Rotate the menu icon */
+}
+
+/* Navigation Links */
+nav ul {
+  list-style: none;
+  display: flex;
+  flex-direction: row;
+  margin: 0;
+  padding: 0;
+  margin-left: 20px;
+  opacity: 0; /* Initially hidden */
+  transform: translateX(-150%); /* Initially off-screen to the left */
+  transition: opacity 0.3s ease-out, transform 0.5s ease-out; /* Slide-in effect */
+}
+
+nav.expanded ul {
+  opacity: 1; /* Make it visible when expanded */
+  transform: translateX(0); /* Slide in from the left */
+}
+
+nav li {
+  margin: 5px 10px;
+}
+
+nav li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  padding: 10px 0;
+  transition: color 0.3s ease-out, transform 0.5s ease-out;
+}
+
+nav li a img {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+nav li a img:hover {
+  transform: scale(1.3);
+}
+
+nav li a:hover {
+  color: #f5c518;
+}
+
+/* Tooltip Styles */
+nav li a {
+  position: relative; /* Make the anchor tag the relative container for the tooltip */
+}
+
+nav li a::after {
+  content: attr(title); /* Use the 'title' attribute content */
+  position: absolute;
+  bottom: -20px; /* Position the tooltip below the icon */
+  left: 40%; /* Center the tooltip horizontally */
+  transform: translateX(-50%) translateY(-25px); /* Start a bit lower for the animation */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 18px; /* Reduced size for better fitting */
+  white-space: nowrap;
+  opacity: 0; /* Initially hidden */
+  visibility: hidden; /* Hidden by default */
+  pointer-events: none; /* Prevent the tooltip from interfering with the hover */
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Smooth fade-in and movement */
+}
+
+nav li a:hover::after {
+  visibility: visible; /* Make the tooltip visible on hover */
+  opacity: 1; /* Make it fully visible */
+  transform: translateX(-50%) translateY(0); /* Animate it to its final position */
+}
