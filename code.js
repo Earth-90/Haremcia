@@ -217,3 +217,18 @@ function includeHTML() {
     }
   }
 };
+
+// Function to toggle the navigation menu
+function toggleNav() {
+	document.getElementById('nav-bar').classList.toggle('expanded');
+  }
+  
+  // Close the menu when the user scrolls
+  window.addEventListener('scroll', function() {
+	// If the menu is expanded and the user scrolls, collapse it
+	if (document.getElementById('nav-bar').classList.contains('expanded')) {
+	  document.getElementById('nav-bar').classList.remove('expanded');
+	}
+  });
+  
+  
