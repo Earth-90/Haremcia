@@ -13,8 +13,8 @@ nav {
   z-index: 9999;
   display: flex;
   align-items: center;
-  padding: 0px 20px;
-  padding-bottom: 10px;
+  margin-left: 20px;
+  padding: 10px 10px;
   transition: opacity 0.3s ease;
   height: 80px;
   overflow: hidden;
@@ -40,15 +40,15 @@ nav ul {
   flex-direction: row;
   margin: 0;
   padding: 0;
-  margin-left: 20px;
+  margin-left: 10px;
   opacity: 0; /* Initially hidden */
   transform: translateX(-150%); /* Initially off-screen to the left */
   transition: opacity 0.3s ease-out, transform 0.5s ease-out; /* Slide-in effect */
 }
 
 nav.expanded ul {
-  opacity: 1; /* Make it visible when expanded */
-  transform: translateX(0); /* Slide in from the left */
+  opacity: 1;
+  transform: translateX(0);
 }
 
 nav li {
@@ -67,7 +67,6 @@ nav li a {
 nav li a img {
   width: 40px;
   height: 40px;
-  margin-right: 10px;
   transition: transform 0.3s ease;
 }
 
@@ -88,7 +87,7 @@ nav li a::after {
   content: attr(title); /* Use the 'title' attribute content */
   position: absolute;
   bottom: -20px; /* Position the tooltip below the icon */
-  left: 40%; /* Center the tooltip horizontally */
+  left: 50%; /* Center the tooltip horizontally */
   transform: translateX(-50%) translateY(-25px); /* Start a bit lower for the animation */
   color: white;
   padding: 5px 10px;
