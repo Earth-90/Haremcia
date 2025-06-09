@@ -1,8 +1,8 @@
 fetch("Header.html")
-.then(response => response.text())
-.then(data => {
-  document.getElementById("header").innerHTML = data;
-});
+	.then(response => response.text())
+	.then(data => {
+		document.getElementById("header").innerHTML = data;
+	});
 
 document.addEventListener("keydown", handleKeyDown);
 
@@ -84,7 +84,7 @@ function showImage(index) {
 }
 
 function changeImage(imageSrc) {
-    document.getElementById('modal-img').src = imageSrc;
+	document.getElementById('modal-img').src = imageSrc;
 }
 
 function closeModal() {
@@ -134,7 +134,7 @@ document.querySelectorAll('.container').forEach((container) => {
 });
 
 function toggleImage(element) {
-    var images = element.querySelectorAll(".popup-image");
+	var images = element.querySelectorAll(".popup-image");
 	var arrow = element.querySelector("#arrow");
 
 	for (var i = 0; i < images.length; i++) {
@@ -152,83 +152,82 @@ function toggleImage(element) {
 }
 
 function OpenPop(area) {
-    // Récupérer les attributs "alt" et "title" de la zone cliquée
-    var altText = area.getAttribute("alt");
-    var titleText = area.getAttribute("title");
+	// Récupérer les attributs "alt" et "title" de la zone cliquée
+	var altText = area.getAttribute("alt");
+	var titleText = area.getAttribute("title");
 
-    // Sélectionner la div de la pop-up
-    var popup = document.getElementById(altText);
-    var popups1 = document.querySelectorAll(".popup1");
-    var popups2 = document.querySelectorAll(".popup2");
+	// Sélectionner la div de la pop-up
+	var popup = document.getElementById(altText);
+	var popups1 = document.querySelectorAll(".popup1");
+	var popups2 = document.querySelectorAll(".popup2");
 
-    // Vérifier si la pop-up est actuellement affichée
-    if (popup.style.display === "block") {
-        // Si la pop-up est affichée, la désafficher
-        popup.style.display = "none";
-    } else {
-        // Ajouter un délai de 500 millisecondes (0.5 seconde) avant d'effectuer la manipulation
-        
-            popups1.forEach(function (popup) {
-                if (popup.style.display === "block") {
-                    setTimeout(function () {
-						popup.style.display = "none";
-					}, 100)	
-                }
-            });
-            popups2.forEach(function (popup) {
-                if (popup.style.display === "block") {
-					setTimeout(function () {
-                    	popup.style.display = "none";
-					}, 100)	
-                }
-            });
-            // Afficher la nouvelle pop-up en la rendant visible
-			setTimeout(function () {
-        	    popup.style.display = "block";
-			}, 300)	
-        ; // Vous pouvez ajuster le délai selon vos besoins
-    }
+	// Vérifier si la pop-up est actuellement affichée
+	if (popup.style.display === "block") {
+		// Si la pop-up est affichée, la désafficher
+		popup.style.display = "none";
+	} else {
+		// Ajouter un délai de 500 millisecondes (0.5 seconde) avant d'effectuer la manipulation
+
+		popups1.forEach(function (popup) {
+			if (popup.style.display === "block") {
+				setTimeout(function () {
+					popup.style.display = "none";
+				}, 100)
+			}
+		});
+		popups2.forEach(function (popup) {
+			if (popup.style.display === "block") {
+				setTimeout(function () {
+					popup.style.display = "none";
+				}, 100)
+			}
+		});
+		// Afficher la nouvelle pop-up en la rendant visible
+		setTimeout(function () {
+			popup.style.display = "block";
+		}, 300)
+			; // Vous pouvez ajuster le délai selon vos besoins
+	}
 }
 
 function includeHTML() {
-  var z, i, elmnt, file, xhttp;
-  /*loop through a collection of all HTML elements:*/
-  z = document.getElementsByTagName("*");
-  for (i = 0; i < z.length; i++) {
-    elmnt = z[i];
-    /*search for elements with a certain attribute:*/
-    file = elmnt.getAttribute("w3-include-html");
-    if (file) {
-      /*make an HTTP request using the attribute value as the file name:*/
-      xhttp = new XMLHttpRequest();
-      xhttp.onreadystatechange = function() {
-        if (this.readyState == 4) {
-          if (this.status == 200) {elmnt.innerHTML = this.responseText;}
-          if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
-          /*remove the attribute, and call this function once more:*/
-          elmnt.removeAttribute("w3-include-html");
-          includeHTML();
-        }
-      }      
-      xhttp.open("GET", file, true);
-      xhttp.send();
-      /*exit the function:*/
-      return;
-    }
-  }
+	var z, i, elmnt, file, xhttp;
+	/*loop through a collection of all HTML elements:*/
+	z = document.getElementsByTagName("*");
+	for (i = 0; i < z.length; i++) {
+		elmnt = z[i];
+		/*search for elements with a certain attribute:*/
+		file = elmnt.getAttribute("w3-include-html");
+		if (file) {
+			/*make an HTTP request using the attribute value as the file name:*/
+			xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function () {
+				if (this.readyState == 4) {
+					if (this.status == 200) { elmnt.innerHTML = this.responseText; }
+					if (this.status == 404) { elmnt.innerHTML = "Page not found."; }
+					/*remove the attribute, and call this function once more:*/
+					elmnt.removeAttribute("w3-include-html");
+					includeHTML();
+				}
+			}
+			xhttp.open("GET", file, true);
+			xhttp.send();
+			/*exit the function:*/
+			return;
+		}
+	}
 };
 
 // Function to toggle the navigation menu
 function toggleNav() {
 	document.getElementById('nav-bar').classList.toggle('expanded');
-  }
-  
-  // Close the menu when the user scrolls
-  window.addEventListener('scroll', function() {
+}
+
+// Close the menu when the user scrolls
+window.addEventListener('scroll', function () {
 	// If the menu is expanded and the user scrolls, collapse it
 	if (document.getElementById('nav-bar').classList.contains('expanded')) {
-	  document.getElementById('nav-bar').classList.remove('expanded');
+		document.getElementById('nav-bar').classList.remove('expanded');
 	}
-  });
-  
-  
+});
+

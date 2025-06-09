@@ -1,72 +1,75 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Erreur d'accès</title>
-  <link rel="stylesheet" href="css/lock.css">
-  <link rel="shortcut icon" href="images/icons/icon6.png" />
-  <script src="code.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Erreur d'accès</title>
+	<link rel="stylesheet" href="css/lock.css">
+	<link rel="shortcut icon" href="images/icons/icon6.png" />
+	<script src="code.js"></script>
 </head>
 
 
 <body>
-  <div id="header"></div>
+	<div id="header"></div>
 
-  <h1>[ERREUR D'AUTHENTIFICATION]</h1>
-  <h2>Nous sommes désolés mais cette page est verrouillée pour les personnes non autorisées.</h2>
-  <h3><a href="index.html">[Revenir en lieu sûr]</a></h3>
+	<h1>[ERREUR D'AUTHENTIFICATION]</h1>
+	<h2>Nous sommes désolés mais cette page est verrouillée pour les personnes non autorisées.</h2>
+	<h3><a href="index.html">[Revenir en lieu sûr]</a></h3>
 
-  <div id="unlock-form">
-    <h4>Entrez le code d'authentification</h4>
-    <input type="password" id="unlock-code">
-    <button onclick="checkCode()" id="button">DEBLOQUER</button>
-    <div id="status-message"></div>
-	<div id="loader-container" style="display: none;">
-    <div class="loader"></div></div>
-  </div>
+	<div id="unlock-form">
+		<h4>Entrez le code d'authentification</h4>
+		<input type="password" id="unlock-code">
+		<button onclick="checkCode()" id="button">DEBLOQUER</button>
+		<div id="status-message"></div>
+		<div id="loader-container" style="display: none;">
+			<div class="loader"></div>
+		</div>
+	</div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-  <script>
-    function checkCode() {
-		var codeInput = document.getElementById("unlock-code").value;
-		var statusMessage = document.getElementById("status-message");
-		var contentDiv = document.getElementById("button");
-		var loaderContainer = document.getElementById("loader-container");
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+	<script>
+		function checkCode() {
+			var codeInput = document.getElementById("unlock-code").value;
+			var statusMessage = document.getElementById("status-message");
+			var contentDiv = document.getElementById("button");
+			var loaderContainer = document.getElementById("loader-container");
 
-		// Hasher le code saisi par l'utilisateur avec SHA-256
-		var hashedCode = sha256(codeInput);
+			// Hasher le code saisi par l'utilisateur avec SHA-256
+			var hashedCode = sha256(codeInput);
 
-		// Vérifier si le code est correct
-		if (hashedCode === "416569497baffe9f281dfd898dfb8c3c8dcf278552a5b733ecfba15b6c30c661") {
-			loaderContainer.style.display = "block";
-			statusMessage.innerHTML = "Déblocage de la page en cours...";
-			contentDiv.style.display = "none";
-			statusMessage.style.color = "green";
-			setTimeout(function () {
-			window.location.href = "locked.html";
-			}, 1300);	
-		} else if (hashedCode === "c521cf9db4220393b05bea96ce2d4abb3cb2783658edb2a0580b4a16f337f248") {
-			loaderContainer.style.display = "block";
-			statusMessage.innerHTML = "Déblocage de la page en cours...";
-			contentDiv.style.display = "none";
-			statusMessage.style.color = "green";
-			setTimeout(function () {
-			window.location.href = "GED.html";
-			}, 1300);			
-		} else {
-			// Afficher un message d'erreur
-			statusMessage.innerHTML = "Code de incorrect, veuillez réessayer";
-			statusMessage.style.color = "red";
+			// Vérifier si le code est correct
+			if (hashedCode === "416569497baffe9f281dfd898dfb8c3c8dcf278552a5b733ecfba15b6c30c661") {
+				loaderContainer.style.display = "block";
+				statusMessage.innerHTML = "Déblocage de la page en cours...";
+				contentDiv.style.display = "none";
+				statusMessage.style.color = "green";
+				setTimeout(function () {
+					window.location.href = "locked.html";
+				}, 1300);
+			} else if (hashedCode === "c521cf9db4220393b05bea96ce2d4abb3cb2783658edb2a0580b4a16f337f248") {
+				loaderContainer.style.display = "block";
+				statusMessage.innerHTML = "Déblocage de la page en cours...";
+				contentDiv.style.display = "none";
+				statusMessage.style.color = "green";
+				setTimeout(function () {
+					window.location.href = "GED.html";
+				}, 1300);
+			} else {
+				// Afficher un message d'erreur
+				statusMessage.innerHTML = "Code de incorrect, veuillez réessayer";
+				statusMessage.style.color = "red";
+			}
 		}
-    }
-	
-	document.addEventListener("keydown", handleKeyDown);
-	function handleKeyDown(event) {
-	if (event.key === "Enter") {
-		checkCode();
+
+		document.addEventListener("keydown", handleKeyDown);
+		function handleKeyDown(event) {
+			if (event.key === "Enter") {
+				checkCode();
+			}
 		}
-	}
-  </script>
- </body>
+	</script>
+</body>
+
 </html>

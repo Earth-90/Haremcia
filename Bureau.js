@@ -2,7 +2,7 @@ let currentModal = null;
 let currentArch = null;
 let last_command = '';
 
-document.getElementById('unlock-btn').addEventListener('click', function() {
+document.getElementById('unlock-btn').addEventListener('click', function () {
     const terminalOutput = document.getElementById('terminal-output');
     const scrollableArea = document.querySelector('.terminal-body');
 
@@ -14,7 +14,6 @@ document.getElementById('unlock-btn').addEventListener('click', function() {
     console.log('Son joué');
     audio.play();
 
-    // Afficher le texte lettre par lettre avec saut de ligne
     const messages = [
         "Accessing Terminal.",
         "Accessing Terminal..",
@@ -41,7 +40,7 @@ document.getElementById('unlock-btn').addEventListener('click', function() {
     showNextMessage();
 });
 
-document.getElementById('terminal-input').addEventListener('keydown', function(e) {
+document.getElementById('terminal-input').addEventListener('keydown', function (e) {
     if (e.key === 'Enter') {
         const command = e.target.value.trim();
         const terminalOutput = document.getElementById('terminal-output');
@@ -78,7 +77,7 @@ function openLog(modalId) {
         modal.classList.remove('hidden');
         currentModal = modal; // Mettre à jour le modal actuel
 
-        modal.querySelector('.close').addEventListener('click', function() {
+        modal.querySelector('.close').addEventListener('click', function () {
             modal.classList.add('hidden');
             currentModal = null; // Réinitialiser lorsque le modal est fermé
         });
@@ -112,7 +111,7 @@ closeArchiveBtn.addEventListener('click', () => {
 });
 
 folderButtons.forEach(button => {
-    button.addEventListener('click', function() {
+    button.addEventListener('click', function () {
         const archiveId = this.getAttribute('data-archive');
         typeMessage(`Opening archive ${archiveId}...`, document.getElementById('terminal-output'), () => {
             OpenArch(archiveId);
@@ -131,7 +130,7 @@ function OpenArch(ArchId) {
         Arch.classList.remove('hidden');
         currentArch = Arch; // Mettre à jour l'archive actuelle
 
-        Arch.querySelector('.close').addEventListener('click', function() {
+        Arch.querySelector('.close').addEventListener('click', function () {
             Arch.classList.add('hidden');
             currentArch = null; // Réinitialiser lorsque l'archive est fermée
         });
