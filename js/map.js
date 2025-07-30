@@ -142,7 +142,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Récupère le détail HTML correspondant au pays
             const detailsDiv = document.getElementById('modalDetails-' + element.id);
-            modalDetails.innerHTML = detailsDiv ? detailsDiv.innerHTML : "Aucun détail disponible.";
+            let detailsHtml = detailsDiv ? detailsDiv.innerHTML : "Aucun détail disponible.";
+
+            // Pour Haremcia : chance de masquer le <span>
+            if (element.id === 'haremcia') {
+                // 50% de chance de supprimer le span
+                if (Math.random() < 0.5) {
+                    detailsHtml = detailsHtml.replace(/<span[^>]*>.*?<\/span>/, '');
+                }
+            }
+
+            modalDetails.innerHTML = detailsHtml;
 
             modalLink.onclick = () => { window.location.href = config.link; };
             modal.style.display = 'flex';
