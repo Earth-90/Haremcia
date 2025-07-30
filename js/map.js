@@ -1,5 +1,46 @@
 // Configuration des zones interactives
 const AREA_CONFIG = {
+    'capital_haremcia': {
+        title: 'Voluptua',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_holy_reich': {
+        title: 'Auréline l\'immaculée',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_GED': {
+        title: 'Capital City',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_GWE': {
+        title: 'Sainte Bastille',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_URSS': {
+        title: 'Frostobyl',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_SPO': {
+        title: 'Utopia',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_complex': {
+        title: 'Main Hub',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+    'capital_celeste': {
+        title: 'Célestia',
+        flag: 'images/map/capital/placeholder.png',
+        link: ''
+    },
+
     'montagne': {
         title: 'Grandes Montagnes',
         flag: 'images/map/flag/montagne.png',
@@ -96,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    const LEFT_MODAL_AREAS = ['complex', 'GED', 'haremcia', 'URSS', 'ZDM'];
+    const LEFT_MODAL_AREAS = ['complex', 'GED', 'haremcia', 'capital_URSS', 'capital_GED', 'capital_haremcia', 'capital_URSS', 'ZDM'];
 
     function setupInteractiveArea(element, config) {
         element.classList.add('map-area');
@@ -153,6 +194,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             modalDetails.innerHTML = detailsHtml;
+
+            // Gestion du bouton - ne pas l'afficher pour les capitales
+            if (element.id.startsWith('capital_')) {
+                modalLink.style.display = 'none';
+            } else {
+                modalLink.style.display = 'block';
+                modalLink.onclick = () => { window.location.href = config.link; };
+            }
 
             modalLink.onclick = () => { window.location.href = config.link; };
             modal.style.display = 'flex';
