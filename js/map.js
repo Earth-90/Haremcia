@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    const LEFT_MODAL_AREAS = ['complex', 'GED', 'haremcia', 'capital_URSS', 'capital_GED', 'capital_haremcia', 'capital_URSS', 'ZDM'];
+    const LEFT_MODAL_AREAS = ['complex', 'GED', 'haremcia', 'URSS', 'capital_URSS', 'capital_GED', 'capital_haremcia', 'capital_complex', 'ZDM'];
 
     function setupInteractiveArea(element, config) {
         element.classList.add('map-area');
