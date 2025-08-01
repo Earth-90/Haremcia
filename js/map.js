@@ -27,7 +27,7 @@ const AREA_CONFIG = {
     },
     'capital_SPO': {
         title: 'Utopia',
-        flag: 'images/map/capital/placeholder.png',
+        flag: 'https://superwaifu.github.io/Holy-Reich/paysages/NewArk%202.png',
         link: ''
     },
     'capital_complex': {
@@ -98,6 +98,16 @@ const AREA_CONFIG = {
     }
 };
 
+const AREA_ACCORDS = {
+    'haremcia': [
+        { name: "Pacte du Désert", effect: "Libre circulation des marchandises", with: "GED" },
+        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+    ],
+    'GED': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+    ],
+};
+
 // Initialisation après le chargement du DOM
 document.addEventListener('DOMContentLoaded', function () {
     const svgObject = document.getElementById('svgMap');
@@ -106,6 +116,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalTitle = document.getElementById('modalTitle');
     const modalDetails = document.getElementById('modalDetails');
     const modalLink = document.getElementById('modalLink');
+    const modalAccordsTab = document.getElementById('modalAccordsTab');
+    const modalAccordsContent = document.getElementById('modalAccordsContent');
+    const openAccordsTab = document.getElementById('openAccordsTab');
+    const closeAccordsTab = document.getElementById('closeAccordsTab');
 
     let tooltipVisible = false;
     let lastOpenedId = null;
@@ -138,6 +152,31 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     const LEFT_MODAL_AREAS = ['complex', 'GED', 'haremcia', 'URSS', 'capital_URSS', 'capital_GED', 'capital_haremcia', 'capital_complex', 'ZDM'];
+
+    function showAccordsTab(areaId) {
+        const accords = AREA_ACCORDS[areaId] || [];
+        if (accords.length === 0) {
+            modalAccordsContent.innerHTML = "<p>Aucun accord international.</p>";
+        } else {
+            modalAccordsContent.innerHTML = accords.map(acc =>
+                `<div class="accord-item">
+                    <b>${acc.name}</b><br>
+                    <span>Effet : ${acc.effect}</span><br>
+                    <span>Avec : ${acc.with}</span>
+                </div>`
+            ).join('');
+        }
+        modalAccordsTab.style.display = 'block';
+    }
+
+    openAccordsTab.addEventListener('click', function () {
+        showAccordsTab(lastOpenedId);
+        openAccordsTab.style.display = 'none';
+    });
+    closeAccordsTab.addEventListener('click', function () {
+        modalAccordsTab.style.display = 'none';
+        openAccordsTab.style.display = 'block';
+    });
 
     function setupInteractiveArea(element, config) {
         element.classList.add('map-area');
@@ -185,12 +224,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const detailsDiv = document.getElementById('modalDetails-' + element.id);
             let detailsHtml = detailsDiv ? detailsDiv.innerHTML : "Aucun détail disponible.";
 
-            // Pour Haremcia : chance de masquer le <span>
-            if (element.id === 'haremcia') {
-                // 50% de chance de supprimer le span
-                if (Math.random() < 0.5) {
-                    detailsHtml = detailsHtml.replace(/<span[^>]*>.*?<\/span>/, '');
-                }
+            // 80% de chance de supprimer le span
+            if (Math.random() < 0.80) {
+                console.log('Haremcia: Span removed');
+                detailsHtml = detailsHtml.replace(/<span[^>]*>.*?<\/span>/, '');
             }
 
             modalDetails.innerHTML = detailsHtml;
@@ -202,6 +239,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 modalLink.style.display = 'block';
                 modalLink.onclick = () => { window.location.href = config.link; };
             }
+
+            // Affiche le bouton "Voir les accords" si des accords existent
+            if (AREA_ACCORDS[element.id] && AREA_ACCORDS[element.id].length > 0) {
+                openAccordsTab.style.display = 'block';
+            } else {
+                openAccordsTab.style.display = 'none';
+            }
+            modalAccordsTab.style.display = 'none';
 
             modalLink.onclick = () => { window.location.href = config.link; };
             modal.style.display = 'flex';
