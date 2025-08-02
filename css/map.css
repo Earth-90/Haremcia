@@ -42,46 +42,6 @@ h2 {
   /* Transition pour la transparence */
 }
 
-/* Animation d'apparition avec un slide depuis le haut */
-.fadeIn {
-  opacity: 0.8;
-  transform: translateY(0);
-  /* Position finale */
-  animation: fadeInAnimation 0.4s ease forwards;
-}
-
-/* Animation de disparition */
-.fadeOut {
-  opacity: 0;
-  transform: translateY(-20px);
-  animation: fadeOutAnimation 0.3s ease forwards;
-}
-
-/* Animation pour l'apparition */
-@keyframes fadeInAnimation {
-  from {
-    opacity: 0;
-    transform: translateY(-40px);
-  }
-
-  to {
-    opacity: 0.8;
-    transform: translateY(0);
-  }
-}
-
-/* Animation pour la disparition */
-@keyframes fadeOutAnimation {
-  from {
-    opacity: 0.8;
-    transform: translateY(0);
-  }
-
-  to {
-    opacity: 0;
-    transform: translateY(-40px);
-  }
-}
 
 /* Superposition de la carte et du SVG */
 .map-stack {
@@ -234,9 +194,43 @@ h2 {
   }
 }
 
-.open-accords-tab,
-.close-accords-tab {
+.open-accords-tab {
   margin: 6px 0;
+  padding: 5px 25px 5px 10px;
+  cursor: pointer;
+  font-size: 1em;
+  border-radius: 6px;
+  border: none;
+  background: #dab900;
+  color: #222;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  position: relative;
+}
+
+.open-accords-tab.right::after {
+  content: '»';
+  position: absolute;
+  right: 5px;
+  font-size: 1.4em;
+  top: 1px;
+}
+
+.open-accords-tab.left::after {
+  content: '«';
+  position: absolute;
+  right: 5px;
+  font-size: 1.4em;
+  top: 1px;
+}
+
+.open-accords-tab:hover {
+  background: #ffd700;
+  transform: scale(1.05);
+}
+
+.close-accords-tab {
+  margin-bottom: 12px;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 1em;
@@ -245,10 +239,58 @@ h2 {
   background: #dab900;
   color: #222;
   transition: all 0.3s ease;
+  font-weight: bold;
 }
 
-.open-accords-tab:hover,
 .close-accords-tab:hover {
   background: #ffd700;
   transform: scale(1.05);
+}
+
+.accords-modal {
+  font-family: 'MONO';
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 320px;
+  height: auto;
+  min-height: 220px;
+  background: #2c2c2c;
+  color: #fff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+  padding: 24px 18px 18px 18px;
+  z-index: 50;
+  border-radius: 18px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: left 0.4s cubic-bezier(.77, .2, .05, 1),
+    right 0.4s cubic-bezier(.77, .2, .05, 1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.accords-modal.side-right {
+  right: -400px;
+  left: auto;
+}
+
+.accords-modal.side-right.open {
+  right: 390px;
+  left: auto;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Positionnement à gauche */
+.accords-modal.side-left {
+  left: -400px;
+  right: auto;
+}
+
+.accords-modal.side-left.open {
+  left: 390px;
+  right: auto;
+  opacity: 1;
+  pointer-events: auto;
 }

@@ -103,9 +103,32 @@ const AREA_ACCORDS = {
         { name: "Pacte du Désert", effect: "Libre circulation des marchandises", with: "GED" },
         { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
     ],
-    'GED': [
+    'holy_reich': [
         { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
     ],
+    'complex': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" },
+        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+    ],
+    'celeste': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+    ],
+    'GED': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" },
+        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+    ],
+    'GWE': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+    ],
+    'SPO': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" },
+        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" },
+        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+    ],
+    'URSS': [
+        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+    ],
+
 };
 
 // Initialisation après le chargement du DOM
@@ -116,12 +139,11 @@ document.addEventListener('DOMContentLoaded', function () {
     const modalTitle = document.getElementById('modalTitle');
     const modalDetails = document.getElementById('modalDetails');
     const modalLink = document.getElementById('modalLink');
-    const modalAccordsTab = document.getElementById('modalAccordsTab');
     const modalAccordsContent = document.getElementById('modalAccordsContent');
     const openAccordsTab = document.getElementById('openAccordsTab');
     const closeAccordsTab = document.getElementById('closeAccordsTab');
+    const accordsModal = document.getElementById('accordsModal');
 
-    let tooltipVisible = false;
     let lastOpenedId = null;
 
     // Fermer la modal en cliquant ailleurs
@@ -153,29 +175,100 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const LEFT_MODAL_AREAS = ['complex', 'GED', 'haremcia', 'URSS', 'capital_URSS', 'capital_GED', 'capital_haremcia', 'capital_complex', 'ZDM'];
 
-    function showAccordsTab(areaId) {
+    openAccordsTab.addEventListener('click', function () {
+        if (accordsModal.classList.contains('open')) {
+            // Fermer la modal accords
+            accordsModal.classList.remove('open');
+            setTimeout(() => {
+                accordsModal.style.display = 'none';
+                // Remettre la flèche >
+                openAccordsTab.classList.remove('left');
+                openAccordsTab.classList.add('right');
+                openAccordsTab.textContent = "Voir les accords ";
+            }, 400);
+        } else {
+            // Ouvrir la modal accords
+            showAccordsModal(lastOpenedId);
+            openAccordsTab.classList.remove('right');
+            openAccordsTab.classList.add('left');
+            openAccordsTab.textContent = "Fermer les accords ";
+        }
+    });
+    closeAccordsTab.addEventListener('click', function () {
+        accordsModal.classList.remove('open');
+        setTimeout(() => {
+            accordsModal.style.display = 'none';
+            openAccordsTab.style.display = 'block';
+        }, 400);
+    });
+
+    // Remplacer la fonction showAccordsModal
+    function showAccordsModal(areaId) {
         const accords = AREA_ACCORDS[areaId] || [];
+
         if (accords.length === 0) {
             modalAccordsContent.innerHTML = "<p>Aucun accord international.</p>";
         } else {
             modalAccordsContent.innerHTML = accords.map(acc =>
                 `<div class="accord-item">
-                    <b>${acc.name}</b><br>
-                    <span>Effet : ${acc.effect}</span><br>
-                    <span>Avec : ${acc.with}</span>
+                    <p><b>${acc.name}</b></p>
+                    <p>Effet : ${acc.effect}</p>
+                    <p>Avec : ${acc.with}</p>
                 </div>`
             ).join('');
         }
-        modalAccordsTab.style.display = 'block';
+
+        // Positionnement identique à la modal principale
+        accordsModal.classList.remove('side-left', 'side-right', 'open');
+
+        if (modal.classList.contains('side-left')) {
+            accordsModal.classList.add('side-left');
+        } else {
+            accordsModal.classList.add('side-right');
+        }
+
+        accordsModal.style.display = 'flex';
+        setTimeout(() => {
+            accordsModal.classList.add('open');
+        }, 10);
     }
 
+    // Modifier le gestionnaire de clic
     openAccordsTab.addEventListener('click', function () {
-        showAccordsTab(lastOpenedId);
-        openAccordsTab.style.display = 'none';
+        if (accordsModal.classList.contains('open')) {
+            accordsModal.classList.remove('open');
+            setTimeout(() => {
+                accordsModal.style.display = 'none';
+                openAccordsTab.classList.remove('left');
+                openAccordsTab.classList.add('right');
+                openAccordsTab.textContent = "Voir les accords ";
+            }, 400);
+        } else {
+            showAccordsModal(lastOpenedId);
+            openAccordsTab.classList.remove('right');
+            openAccordsTab.classList.add('left');
+            openAccordsTab.textContent = "Fermer les accords ";
+        }
     });
-    closeAccordsTab.addEventListener('click', function () {
-        modalAccordsTab.style.display = 'none';
-        openAccordsTab.style.display = 'block';
+
+    // Ajouter la fermeture conjointe dans le clic externe
+    document.addEventListener('mousedown', function (e) {
+        if (modal.style.display === 'flex' && !modal.contains(e.target)) {
+            // Fermer modale principale
+            modal.classList.remove('open');
+
+            // Fermer modale accords si ouverte
+            if (accordsModal.style.display === 'flex') {
+                accordsModal.classList.remove('open');
+            }
+
+            setTimeout(() => {
+                modal.style.display = 'none';
+                accordsModal.style.display = 'none';
+                modal.classList.remove('side-left', 'side-right');
+                lastOpenedId = null;
+            }, 400);
+        }
     });
 
     function setupInteractiveArea(element, config) {
@@ -183,12 +276,10 @@ document.addEventListener('DOMContentLoaded', function () {
         element.setAttribute('title', config.title);
 
         element.addEventListener('mouseover', function () {
-            tooltipVisible = true;
             element.style.opacity = "0.5";
         });
 
         element.addEventListener('mouseout', function () {
-            tooltipVisible = false;
             element.style.opacity = "0";
         });
 
@@ -199,6 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (lastOpenedId === element.id && modal.style.display === 'flex') {
                 modal.classList.remove('open');
                 setTimeout(() => {
+                    accordsModal.style.display = 'none';
                     modal.style.display = 'none';
                     modal.classList.remove('side-left', 'side-right');
                     lastOpenedId = null;
@@ -226,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // 80% de chance de supprimer le span
             if (Math.random() < 0.80) {
-                console.log('Haremcia: Span removed');
+                console.log('Span removed');
                 detailsHtml = detailsHtml.replace(/<span[^>]*>.*?<\/span>/, '');
             }
 
@@ -243,10 +335,13 @@ document.addEventListener('DOMContentLoaded', function () {
             // Affiche le bouton "Voir les accords" si des accords existent
             if (AREA_ACCORDS[element.id] && AREA_ACCORDS[element.id].length > 0) {
                 openAccordsTab.style.display = 'block';
+                openAccordsTab.classList.remove('left');
+                openAccordsTab.classList.add('right');
+                openAccordsTab.textContent = "Voir les accords ";
             } else {
                 openAccordsTab.style.display = 'none';
             }
-            modalAccordsTab.style.display = 'none';
+            accordsModal.style.display = 'none';
 
             modalLink.onclick = () => { window.location.href = config.link; };
             modal.style.display = 'flex';
