@@ -328,7 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Affichage des accords
     function showAccordsModal(areaId) {
-        // Filtrer les accords contenant la zone sélectionnée
+        // Filtrer les accords concernant la zone sélectionnée
         const relevantAccords = ALL_ACCORDS.filter(accord =>
             accord.parties.includes(areaId)
         );
@@ -338,31 +338,43 @@ document.addEventListener('DOMContentLoaded', function () {
             : relevantAccords.map(accord => {
                 const logo = "images/map/accord/icon.svg";
 
-                // Générer les drapeaux dans l'ordre d'apparition
-                let flagsHTML = '';
-                for (let i = 0; i < accord.parties.length; i++) {
-                    const countryId = accord.parties[i];
-                    const flag = AREA_CONFIG[countryId]?.flag || '';
-                    flagsHTML += `<img src="${flag}" alt="Drapeau" class="accord-flag">`;
+                // MODIFICATION CLÉ : Réorganiser les parties pour mettre le pays sélectionné en premier
+                const orderedParties = [...accord.parties];
+                const currentIndex = orderedParties.indexOf(areaId);
 
-                    if (i < accord.parties.length - 1) {
+                if (currentIndex > -1) {
+                    // Retirer le pays sélectionné de sa position actuelle
+                    orderedParties.splice(currentIndex, 1);
+                    // Ajouter le pays sélectionné au début
+                    orderedParties.unshift(areaId);
+                }
+
+                // Générer les drapeaux dans le nouvel ordre
+                let flagsHTML = '';
+                for (let i = 0; i < orderedParties.length; i++) {
+                    const countryId = orderedParties[i];
+                    const flag = AREA_CONFIG[countryId]?.flag || '';
+                    flagsHTML += `<img src="${flag}" alt="Drapeau ${countryId}" class="accord-flag">`;
+
+                    // Ajouter l'icône entre les drapeaux
+                    if (i < orderedParties.length - 1) {
                         flagsHTML += `<img src="${logo}" alt="logo" class="accord-icon">`;
                     }
                 }
 
                 return `
-            <div class="accord-item">
-                <div class="accord-details">
-                    <img src="${accord.image}" alt="accord_icon" class="accord-image">
-                    <div class="accord-info">
-                        <h4><b>${accord.name}</b></h4>
-                        <p>Date : ${accord.date}</p>
+                <div class="accord-item">
+                    <div class="accord-details">
+                        <img src="${accord.image}" alt="accord_icon" class="accord-image">
+                        <div class="accord-info">
+                            <h4><b>${accord.name}</b></h4>
+                            <p>Date : ${accord.date}</p>
+                        </div>
                     </div>
-                </div>
-                <div class="accord-flags">
-                    ${flagsHTML}
-                </div>
-            </div>`;
+                    <div class="accord-flags">
+                        ${flagsHTML}
+                    </div>
+                </div>`;
             }).join('');
 
         // Positionnement
