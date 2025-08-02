@@ -100,33 +100,41 @@ const AREA_CONFIG = {
 
 const AREA_ACCORDS = {
     'haremcia': [
-        { name: "Pacte du Désert", effect: "Libre circulation des marchandises", with: "GED" },
-        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+        { name: "The Water Pipeline Act", date: "05/10/94", with: ["GED"], image: "images/map/accord/placeholder.png" },
+        { name: "The Protective Wall Act", date: "04/09/98", with: ["URSS"], image: "images/map/accord/placeholder.png" },
+        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["holy_reich"], image: "images/map/accord/placeholder.png" }
     ],
     'holy_reich': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["haremcia"], image: "images/map/accord/placeholder.png" },
+        { name: "Cesser le feu", date: "21/01/140", with: ["URSS"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
+        { name: "Pacte de Morganite", date: "15/10/135", with: ["celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png" },
+        { name: "Acte du complexe militaro-industriel", date: "23/03/141", with: ["celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["celeste", "GWE", "SPO"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
     ],
     'complex': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" },
-        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+        { name: "[CLASSIFIED]", date: "[CLASSIFIED]", with: ["haremcia"], image: "images/map/accord/placeholder.png" },
     ],
     'celeste': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+        { name: "Pacte de Morganite", date: "15/10/135", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png" },
+        { name: "Acte du complexe militaro-industriel", date: "23/03/141", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "SPO"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
+        { name: "Accords de vente de métaux et terres rares", date: "06/05/140", with: ["holy_reich"], image: "images/map/accord/placeholder.png" },
     ],
     'GED': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" },
-        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+        { name: "Accord d'exploitation des zones ultramarines", date: "09/04/146", with: ["holy_reich"], image: "images/map/accord/placeholder.png" },
+        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GWE"], image: "images/map/accord/placeholder.png" }
     ],
     'GWE': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GED"], image: "images/map/accord/placeholder.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "celeste", "SPO"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
     ],
     'SPO': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" },
-        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" },
-        { name: "Accord de non-agression", effect: "Aucune attaque militaire", with: "Holy Reich" }
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
+        { name: "Exploitation du réseau ferroviaire", date: "01/05/131", with: ["holy_reich"], image: "images/map/accord/placeholder.png" },
     ],
     'URSS': [
-        { name: "Alliance Technologique", effect: "Partage de brevets et innovations", with: "Complex" }
+        { name: "Cesser le feu", date: "21/01/140", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
+        { name: "The Protective Wall Act", date: "04/09/98", with: ["haremcia"], image: "images/map/accord/placeholder.png" },
     ],
 
 };
@@ -235,6 +243,15 @@ document.addEventListener('DOMContentLoaded', function () {
         e.preventDefault();
         const config = AREA_CONFIG[areaId];
 
+        // Fermer les accords si ouverts
+        if (elements.accordsModal.style.display === 'flex') {
+            elements.accordsModal.classList.remove('open');
+            elements.openAccordsButton.classList.remove('open');
+            setTimeout(() => {
+                elements.accordsModal.style.display = 'none';
+            }, 400);
+        }
+
         // Toggle de fermeture
         if (lastOpenedId === areaId && elements.modal.style.display === 'flex') {
             ModalUtils.closeAllModals(elements.modal, elements.accordsModal);
@@ -271,19 +288,44 @@ document.addEventListener('DOMContentLoaded', function () {
         const accords = AREA_ACCORDS[areaId] || [];
         elements.modalAccordsContent.innerHTML = accords.length === 0
             ? "<p>Aucun accord international.</p>"
-            : accords.map(acc => `
-                <div class="accord-item">
-                    <h4><b>${acc.name}</b></h4>
-                    <p>Effet : ${acc.effect}</p>
-                    <p>Avec : ${acc.with}</p>
-                </div>`).join('');
+            : accords.map(acc => {
+                const flagCurrent = AREA_CONFIG[areaId]?.flag || '';
+                const logo = "images/map/accord/icon.svg";
+
+                // Générer les drapeaux des partenaires avec le logo entre eux
+                let flagsPartnersHTML = '';
+                for (let i = 0; i < acc.with.length; i++) {
+                    const country = acc.with[i];
+                    const flagPartner = AREA_CONFIG[country]?.flag || '';
+                    flagsPartnersHTML += `<img src="${flagPartner}" alt="Drapeau partenaire" class="accord-flag">`;
+                    // Ajouter le logo après chaque drapeau sauf le dernier
+                    if (i < acc.with.length - 1) {
+                        flagsPartnersHTML += `<img src="${logo}" alt="logo" class="accord-icon">`;
+                    }
+                }
+
+                return `
+            <div class="accord-item">
+                <div class="accord-details">
+                    <img src="${acc.image}" alt="accord_icon" class="accord-image">
+                    <div class="accord-info">
+                        <h4><b>${acc.name}</b></h4>
+                        <p>Date : ${acc.date}</p>
+                    </div>
+                </div>
+                <div class="accord-flags">
+                    <img src="${flagCurrent}" alt="Drapeau actuel" class="accord-flag">
+                    <img src="${logo}" alt="logo" class="accord-icon">
+                    ${flagsPartnersHTML}
+                </div>
+            </div>`;
+            }).join('');
 
         // Positionnement
         elements.accordsModal.classList.remove('side-left', 'side-right');
         elements.accordsModal.classList.add(
             elements.modal.classList.contains('side-left') ? 'side-left' : 'side-right'
         );
-
         elements.accordsModal.style.display = 'flex';
         setTimeout(() => elements.accordsModal.classList.add('open'), 10);
     }

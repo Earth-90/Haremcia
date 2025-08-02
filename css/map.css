@@ -134,9 +134,7 @@ h3 {
 .modal-flag {
   margin-top: 25px;
   width: 100%;
-  border-radius: 8px;
   margin-bottom: 12px;
-  object-fit: contain;
 }
 
 .modal-link {
@@ -227,6 +225,7 @@ h3 {
 .open-accords-tab.side-right .arrow {
   transform: rotate(180deg);
 }
+
 .open-accords-tab.side-right.open .arrow {
   transform: rotate(0deg);
 }
@@ -234,6 +233,7 @@ h3 {
 .open-accords-tab.side-left .arrow {
   transform: rotate(0deg);
 }
+
 .open-accords-tab.side-left.open .arrow {
   transform: rotate(180deg);
 }
@@ -264,10 +264,9 @@ h3 {
 .accords-modal {
   font-family: 'MONO';
   position: fixed;
-  top: 75%;
+  top: 50%;
   transform: translateY(-50%);
-  width: 340px;
-  height: 50%;
+  width: 400px;
   min-height: 220px;
   background: #252525;
   color: #fff;
@@ -281,15 +280,6 @@ h3 {
     right 0.4s cubic-bezier(.77, .2, .05, 1);
   opacity: 0;
   pointer-events: none;
-}
-
-.accords-modal p {
-  margin: 5px;
-}
-
-.accords-modal h4 {
-  margin-top: 15px;
-  margin-bottom: 0px;
 }
 
 
@@ -316,4 +306,67 @@ h3 {
   right: auto;
   opacity: 1;
   pointer-events: auto;
+}
+
+#modalAccordsContent {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+}
+
+/* Styles pour les accords */
+.accord-item {
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #444;
+}
+
+.accord-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.accord-details {
+  display: flex;
+}
+
+.accord-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.accord-info p {
+  font-size: 0.9em;
+  font-style: italic;
+  margin: 6px;
+}
+
+.accord-info h4 {
+  font-size: 1.2em;
+  margin: 6px;
+}
+
+
+.accord-image {
+  max-height: 85px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.accord-flags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.accord-flag {
+  border: #ffffff solid 1px;
+  max-height: 35px;
+}
+.accord-icon {
+  max-height: 25px;
 }
