@@ -98,50 +98,86 @@ const AREA_CONFIG = {
     }
 };
 
-const AREA_ACCORDS = {
-    'haremcia': [
-        { name: "The Water Pipeline Act", date: "05/10/94", with: ["GED"], image: "images/map/accord/pipe.png" },
-        { name: "The Protective Wall Act", date: "04/09/98", with: ["URSS"], image: "images/map/accord/wall.png" },
-        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["holy_reich"], image: "images/map/accord/dmz.png" }
-    ],
-    'holy_reich': [
-        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["haremcia"], image: "images/map/accord/dmz.png" },
-        { name: "Cesser le feu", date: "21/01/140", with: ["URSS"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
-        { name: "Pacte de Morganite", date: "15/10/135", with: ["celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png" },
-        { name: "Acte du complexe militaro-industriel", date: "23/03/141", with: ["celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png" },
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["celeste", "GWE", "SPO"], image: "images/map/accord/compas.png" },
-        { name: "Accord d'exploitation des zones ultramarines", date: "09/04/146", with: ["GED"], image: "images/map/accord/fish.png" },
-        { name: "Exploitation du réseau ferroviaire", date: "01/05/131", with: ["SPO"], image: "images/map/accord/rail.png" },
-    ],
-    'complex': [
-        { name: "[CLASSIFIED]", date: "[CLASSIFIED]", with: ["haremcia"], image: "images/map/accord/classified.png" },
-    ],
-    'celeste': [
-        { name: "Pacte de Morganite", date: "15/10/135", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png" },
-        { name: "Acte du complexe militaro-industriel", date: "23/03/141", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png" },
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "SPO"], image: "images/map/accord/compas.png" },
-        { name: "Accords de vente de métaux et terres rares", date: "06/05/140", with: ["GED"], image: "images/map/accord/commerce.png" },
-    ],
-    'GED': [
-        { name: "Accord d'exploitation des zones ultramarines", date: "09/04/146", with: ["holy_reich"], image: "images/map/accord/fish.png" },
-        { name: "The Water Pipeline Act", date: "05/10/94", with: ["haremcia"], image: "images/map/accord/pipe.png" },
-        { name: "Accords de vente de métaux et terres rares", date: "06/05/140", with: ["celeste"], image: "images/map/accord/commerce.png" },
-        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GWE"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" }
-    ],
-    'GWE': [
-        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GED"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "celeste", "SPO"], image: "images/map/accord/compas.png" },
-    ],
-    'SPO': [
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "celeste"], image: "images/map/accord/compas.png" },
-        { name: "Exploitation du réseau ferroviaire", date: "01/05/131", with: ["holy_reich"], image: "images/map/accord/rail.png" },
-    ],
-    'URSS': [
-        { name: "Cesser le feu", date: "21/01/140", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
-        { name: "The Protective Wall Act", date: "04/09/98", with: ["haremcia"], image: "images/map/accord/wall.png" },
-    ],
-};
-
+const ALL_ACCORDS = [
+    {
+        name: "The Water Pipeline Act",
+        date: "05/10/94",
+        parties: ["haremcia", "GED"],
+        image: "images/map/accord/pipe.png"
+    },
+    {
+        name: "The Protective Wall Act",
+        date: "04/09/98",
+        parties: ["haremcia", "URSS"],
+        image: "images/map/accord/wall.png"
+    },
+    {
+        name: "Accord de gestion commune de la ZDM",
+        date: "01/05/95",
+        parties: ["haremcia", "holy_reich"],
+        image: "images/map/accord/dmz.png"
+    },
+    {
+        name: "Cesser le feu",
+        date: "21/01/140",
+        parties: ["holy_reich", "URSS"],
+        image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png"
+    },
+    {
+        name: "Pacte de Morganite",
+        date: "15/10/135",
+        parties: ["holy_reich", "celeste"],
+        image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png"
+    },
+    {
+        name: "Acte du complexe militaro-industriel",
+        date: "23/03/141",
+        parties: ["holy_reich", "celeste"],
+        image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png"
+    },
+    {
+        name: "Accords du bloc de l'Ouest",
+        date: "10/11/111",
+        parties: ["haremcia", "GED", "URSS"],
+        image: "images/map/accord/west.png"
+    },
+    {
+        name: "Accords du bloc de l'Est",
+        date: "01/01/122",
+        parties: ["holy_reich", "celeste", "GWE", "SPO"],
+        image: "images/map/accord/est.png"
+    },
+    {
+        name: "Accord d'exploitation des zones ultramarines",
+        date: "09/04/146",
+        parties: ["holy_reich", "GED"],
+        image: "images/map/accord/fish.png"
+    },
+    {
+        name: "Exploitation du réseau ferroviaire",
+        date: "01/05/131",
+        parties: ["holy_reich", "SPO"],
+        image: "images/map/accord/rail.png"
+    },
+    {
+        name: "[CLASSIFIED]",
+        date: "[CLASSIFIED]",
+        parties: ["complex", "haremcia"],
+        image: "images/map/accord/classified.png"
+    },
+    {
+        name: "Accords de vente de métaux et terres rares",
+        date: "06/05/140",
+        parties: ["celeste", "GED"],
+        image: "images/map/accord/commerce.png"
+    },
+    {
+        name: "Traité de paix (signé uniquement par le GED)",
+        date: "08/03/96",
+        parties: ["GED", "GWE"],
+        image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png"
+    }
+];
 
 // Fonctions réutilisables
 const ModalUtils = {
@@ -279,9 +315,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         // Gestion des accords
-        elements.openAccordsButton.style.display = (AREA_ACCORDS[areaId]?.length > 0)
-            ? 'flex'
-            : 'none';
+        elements.openAccordsButton.style.display =
+            ALL_ACCORDS.some(accord => accord.parties.includes(areaId))
+                ? 'flex'
+                : 'none';
 
         // Affichage
         elements.modal.style.display = 'flex';
@@ -291,38 +328,39 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Affichage des accords
     function showAccordsModal(areaId) {
-        const accords = AREA_ACCORDS[areaId] || [];
-        elements.modalAccordsContent.innerHTML = accords.length === 0
+        // Filtrer les accords contenant la zone sélectionnée
+        const relevantAccords = ALL_ACCORDS.filter(accord =>
+            accord.parties.includes(areaId)
+        );
+
+        elements.modalAccordsContent.innerHTML = relevantAccords.length === 0
             ? "<p>Aucun accord international.</p>"
-            : accords.map(acc => {
-                const flagCurrent = AREA_CONFIG[areaId]?.flag || '';
+            : relevantAccords.map(accord => {
                 const logo = "images/map/accord/icon.svg";
 
-                // Générer les drapeaux des partenaires avec le logo entre eux
-                let flagsPartnersHTML = '';
-                for (let i = 0; i < acc.with.length; i++) {
-                    const country = acc.with[i];
-                    const flagPartner = AREA_CONFIG[country]?.flag || '';
-                    flagsPartnersHTML += `<img src="${flagPartner}" alt="Drapeau partenaire" class="accord-flag">`;
-                    // Ajouter le logo après chaque drapeau sauf le dernier
-                    if (i < acc.with.length - 1) {
-                        flagsPartnersHTML += `<img src="${logo}" alt="logo" class="accord-icon">`;
+                // Générer les drapeaux dans l'ordre d'apparition
+                let flagsHTML = '';
+                for (let i = 0; i < accord.parties.length; i++) {
+                    const countryId = accord.parties[i];
+                    const flag = AREA_CONFIG[countryId]?.flag || '';
+                    flagsHTML += `<img src="${flag}" alt="Drapeau" class="accord-flag">`;
+
+                    if (i < accord.parties.length - 1) {
+                        flagsHTML += `<img src="${logo}" alt="logo" class="accord-icon">`;
                     }
                 }
 
                 return `
             <div class="accord-item">
                 <div class="accord-details">
-                    <img src="${acc.image}" alt="accord_icon" class="accord-image">
+                    <img src="${accord.image}" alt="accord_icon" class="accord-image">
                     <div class="accord-info">
-                        <h4><b>${acc.name}</b></h4>
-                        <p>Date : ${acc.date}</p>
+                        <h4><b>${accord.name}</b></h4>
+                        <p>Date : ${accord.date}</p>
                     </div>
                 </div>
                 <div class="accord-flags">
-                    <img src="${flagCurrent}" alt="Drapeau actuel" class="accord-flag">
-                    <img src="${logo}" alt="logo" class="accord-icon">
-                    ${flagsPartnersHTML}
+                    ${flagsHTML}
                 </div>
             </div>`;
             }).join('');
