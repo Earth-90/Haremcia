@@ -100,43 +100,46 @@ const AREA_CONFIG = {
 
 const AREA_ACCORDS = {
     'haremcia': [
-        { name: "The Water Pipeline Act", date: "05/10/94", with: ["GED"], image: "images/map/accord/placeholder.png" },
-        { name: "The Protective Wall Act", date: "04/09/98", with: ["URSS"], image: "images/map/accord/placeholder.png" },
-        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["holy_reich"], image: "images/map/accord/placeholder.png" }
+        { name: "The Water Pipeline Act", date: "05/10/94", with: ["GED"], image: "images/map/accord/pipe.png" },
+        { name: "The Protective Wall Act", date: "04/09/98", with: ["URSS"], image: "images/map/accord/wall.png" },
+        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["holy_reich"], image: "images/map/accord/dmz.png" }
     ],
     'holy_reich': [
-        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["haremcia"], image: "images/map/accord/placeholder.png" },
+        { name: "Accord de gestion commune de la ZDM", date: "01/05/95", with: ["haremcia"], image: "images/map/accord/dmz.png" },
         { name: "Cesser le feu", date: "21/01/140", with: ["URSS"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
         { name: "Pacte de Morganite", date: "15/10/135", with: ["celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png" },
         { name: "Acte du complexe militaro-industriel", date: "23/03/141", with: ["celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png" },
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["celeste", "GWE", "SPO"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["celeste", "GWE", "SPO"], image: "images/map/accord/compas.png" },
+        { name: "Accord d'exploitation des zones ultramarines", date: "09/04/146", with: ["GED"], image: "images/map/accord/fish.png" },
+        { name: "Exploitation du réseau ferroviaire", date: "01/05/131", with: ["SPO"], image: "images/map/accord/rail.png" },
     ],
     'complex': [
-        { name: "[CLASSIFIED]", date: "[CLASSIFIED]", with: ["haremcia"], image: "images/map/accord/placeholder.png" },
+        { name: "[CLASSIFIED]", date: "[CLASSIFIED]", with: ["haremcia"], image: "images/map/accord/classified.png" },
     ],
     'celeste': [
         { name: "Pacte de Morganite", date: "15/10/135", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/alliance.png" },
         { name: "Acte du complexe militaro-industriel", date: "23/03/141", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/gear.png" },
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "SPO"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
-        { name: "Accords de vente de métaux et terres rares", date: "06/05/140", with: ["holy_reich"], image: "images/map/accord/placeholder.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "SPO"], image: "images/map/accord/compas.png" },
+        { name: "Accords de vente de métaux et terres rares", date: "06/05/140", with: ["GED"], image: "images/map/accord/commerce.png" },
     ],
     'GED': [
-        { name: "Accord d'exploitation des zones ultramarines", date: "09/04/146", with: ["holy_reich"], image: "images/map/accord/placeholder.png" },
-        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GWE"], image: "images/map/accord/placeholder.png" }
+        { name: "Accord d'exploitation des zones ultramarines", date: "09/04/146", with: ["holy_reich"], image: "images/map/accord/fish.png" },
+        { name: "The Water Pipeline Act", date: "05/10/94", with: ["haremcia"], image: "images/map/accord/pipe.png" },
+        { name: "Accords de vente de métaux et terres rares", date: "06/05/140", with: ["celeste"], image: "images/map/accord/commerce.png" },
+        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GWE"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" }
     ],
     'GWE': [
-        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GED"], image: "images/map/accord/placeholder.png" },
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "celeste", "SPO"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
+        { name: "Traité de paix (signé uniquement par le GED)", date: "08/03/96", with: ["GED"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "celeste", "SPO"], image: "images/map/accord/compas.png" },
     ],
     'SPO': [
-        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "celeste"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/compas.png" },
-        { name: "Exploitation du réseau ferroviaire", date: "01/05/131", with: ["holy_reich"], image: "images/map/accord/placeholder.png" },
+        { name: "Accords du bloc de l'Est", date: "01/01/122", with: ["holy_reich", "GWE", "celeste"], image: "images/map/accord/compas.png" },
+        { name: "Exploitation du réseau ferroviaire", date: "01/05/131", with: ["holy_reich"], image: "images/map/accord/rail.png" },
     ],
     'URSS': [
         { name: "Cesser le feu", date: "21/01/140", with: ["holy_reich"], image: "https://superwaifu.github.io/Holy-Reich/logo/contract/peace.png" },
-        { name: "The Protective Wall Act", date: "04/09/98", with: ["haremcia"], image: "images/map/accord/placeholder.png" },
+        { name: "The Protective Wall Act", date: "04/09/98", with: ["haremcia"], image: "images/map/accord/wall.png" },
     ],
-
 };
 
 
@@ -270,7 +273,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Configuration du lien
         elements.modalLink.style.display = areaId.startsWith('capital_') ? 'none' : 'block';
-        elements.modalLink.onclick = () => { window.location.href = config.link; };
+        elements.modalLink.onclick = () => {
+            window.open(config.link, '_blank');
+        };
+
 
         // Gestion des accords
         elements.openAccordsButton.style.display = (AREA_ACCORDS[areaId]?.length > 0)
