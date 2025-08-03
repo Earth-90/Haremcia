@@ -58,7 +58,7 @@ const AREA_CONFIG = {
     },
     'complex': {
         title: 'État Indépendant du Complex',
-        flag: 'images/map/flag/flag_complex.png',
+        flag: 'images/map/flag/flag_Complex.png',
         link: 'complex.html'
     },
     'haremcia': {
@@ -144,7 +144,7 @@ const ALL_ACCORDS = [
     {
         name: "Accords du bloc de l'Est",
         date: "01/01/122",
-        parties: ["holy_reich", "celeste", "GWE", "SPO"],
+        parties: ["holy_reich", "GWE", "SPO"],
         image: "images/map/accord/est.png"
     },
     {

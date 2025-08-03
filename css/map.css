@@ -1,20 +1,20 @@
 @font-face {
-  font-family: 'DancingScript';
-  src: url('font/DancingScript.ttf') format('truetype');
+  font-family: 'font1';
+  src: url('font/Hulahoy-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'MONO';
-  src: url('font/MONO.ttf') format('truetype');
+  font-family: 'font2';
+  src: url('font/Type\ Machine.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 body {
   background: linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(20, 20, 20, 1) 50%, rgba(0, 0, 0, 1) 100%);
-  font-family: 'DancingScript';
+  font-family: 'font1';
   margin: 0px;
 }
 
@@ -82,7 +82,7 @@ h3 {
 
 /* Modal pays */
 .map-modal {
-  font-family: 'MONO';
+  font-family: 'font2';
   position: fixed;
   top: 0;
   width: 350px;
@@ -138,7 +138,7 @@ h3 {
 }
 
 .modal-link {
-  font-family: 'MONO';
+  font-family: 'font2';
   text-align: center;
   margin-top: 24px;
   padding: 10px 24px;
@@ -262,7 +262,7 @@ h3 {
 }
 
 .accords-modal {
-  font-family: 'MONO';
+  font-family: 'font2';
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
