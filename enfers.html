@@ -4,8 +4,9 @@
 <head>
 	<title>Les Enfers</title>
 	<meta charset="utf-8">
-	<link rel="stylesheet" href="css/enfers2.css">
 	<link rel="stylesheet" href="css/enfers1.css">
+	<link rel="stylesheet" href="css/enfers2.css">
+	<link rel="stylesheet" href="css/enfers3.css">
 	<link rel="stylesheet" href="css/header.css">
 	<link rel="shortcut icon" href="images/icons/icon3.png" />
 	<script src="js/code.js"></script>
@@ -325,7 +326,19 @@
 		</h4>
 	</div>
 
-	<br>
+	<div class="gallery">
+		<div class="content">
+			<img src="images/enfers/.png" alt="" onclick="openModal(this)" loading="lazy">
+			<figcaption>
+				<div onclick="showCaption(this)">
+					<p class="description">𖤐𖤐𖤐𖤐𖤐</p>
+					<h6>
+
+					</h6>
+				</div>
+			</figcaption>
+		</div>
+	</div>
 
 	<div class="description" onclick="lore(this)" id="Hellborn">
 		<h3>Hellborns (?)</h3>
@@ -348,7 +361,7 @@
 			</figcaption>
 		</div>
 		<div class="content">
-			<img src="images/magique/demone6.png" alt="" onclick="openModal(this)" loading="lazy">
+			<img src="images/magique/demone4.png" alt="" onclick="openModal(this)" loading="lazy">
 			<figcaption>
 				<div onclick="showCaption(this)">
 					<p class="description">𖤐𖤐</p>
@@ -395,7 +408,8 @@
 
 	<div class="description" onclick="lore(this)" id="Helldog">
 		<h3>Chiens des Enfers (?)</h3>
-		<h4> Les Chiens des Enfers sont une espèce de Démons native de l'Enfer, qui ressemble à des canidés comme les
+		<h4> Les Chiens des Enfers sont une espèce de Démons native de l'Enfer, qui ressemble à des canidés comme
+			les
 			chiens et les loups. <br>
 			Ils partagent le rang le plus bas dans la hiérarchie aux côtés des Hellborns.
 		</h4>
@@ -468,92 +482,18 @@
 		<h2 style="color:red;">Les Cercles</h2>
 	</div>
 
-	<div class="circle_name" onclick="lore(this)" id="Orgueil">
-		<p id="sin1">Orgueil</p>
-		<h4>
-		</h4>
-	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/pride.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
+	<div class="tooltip" id="tooltip"></div>
+	<div class="circle-modal" id="circle-modal">
+		<div class="circle-modal-content" id="circle-modalContent"></div>
 	</div>
 
-	<div class="circle_name" onclick="lore(this)" id="Colère">
-		<p id="sin2">Colère</p>
-		<h4>
-		</h4>
+	<div class="circle-container">
+		<svg width="400" height="700" id="circleMap"></svg>
 	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/wrath.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
-	</div>
+	<script src="js/enfers.js"></script>
 
-	<div class="circle_name" onclick="lore(this)" id="Gourmandise">
-		<p id="sin3">Gourmandise</p>
-		<h4>
-		</h4>
-	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/gluttonery.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
-	</div>
-
-	<div class="circle_name" onclick="lore(this)" id="Avarice">
-		<p id="sin4">Avarice</p>
-		<h4>
-		</h4>
-	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/greed.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
-	</div>
-
-	<div class="circle_name" onclick="lore(this)" id="Luxure">
-		<p id="sin5">Luxure</p>
-		<h4>
-		</h4>
-	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/lust.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
-	</div>
-
-	<div class="circle_name" onclick="lore(this)" id="Envie">
-		<p id="sin6">Envie</p>
-		<h4>
-		</h4>
-	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/envy.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
-	</div>
-
-	<div class="circle_name" onclick="lore(this)" id="Paresse">
-		<p id="sin7">Paresse</p>
-		<h4>
-		</h4>
-	</div>
-	<div class="paysage">
-		<div class="content">
-			<img src="images/paysage/sloth.png" alt="test" onclick="openModal(this)" loading="lazy">
-			<figcaption>[Welcome]</figcaption>
-		</div>
-	</div>
 
 	<h5><a href="corrupt.html">Return</a></h5>
-
 
 	<div class="modal">
 		<div class="modal-content">
