@@ -38,14 +38,16 @@ let casseteLoaded = false;
 
 
 // Fonction utilitaire pour gérer les sons système
-function playSystemSound(sound) {
-    if (sound.readyState >= 2) { // Vérifie si le son est chargé
+async function playSystemSound(sound) {
+    if (sound.readyState >= 2) {
         sound.currentTime = 0;
-        const playPromise = sound.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("Playback error:", error);
+        try {
+            await sound.play();
+            await new Promise(resolve => {
+                sound.onended = resolve;
             });
+        } catch (error) {
+            console.log("Playback error:", error);
         }
     }
 }
@@ -56,9 +58,6 @@ function playClickSound() {
     playSystemSound(clickSound);
 }
 
-[playBtn, pauseBtn, stopBtn, prevBtn, nextBtn].forEach(btn => {
-    btn.addEventListener('click', playClickSound);
-});
 
 // Fonction pour mettre à jour la position du carrousel
 function updateCarousel() {
@@ -204,8 +203,12 @@ function loadCassette(src) {
     });
 }
 // Contrôles de lecture
-playBtn.addEventListener('click', () => {
+playBtn.addEventListener('click', async () => {
     if (casseteLoaded && audio.src) {
+        // D'abord jouer le son de clic
+        await playSystemSound(clickSound);
+        
+        // Ensuite lancer la musique
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
@@ -223,8 +226,9 @@ playBtn.addEventListener('click', () => {
     }
 });
 
-pauseBtn.addEventListener('click', () => {
+pauseBtn.addEventListener('click', async () => {
     if (casseteLoaded) {
+        await playSystemSound(clickSound);
         audio.pause();
         isPlaying = false;
         pauseBtn.classList.add('active');
@@ -236,8 +240,9 @@ pauseBtn.addEventListener('click', () => {
     }
 });
 
-stopBtn.addEventListener('click', () => {
+stopBtn.addEventListener('click', async () => {
     if (casseteLoaded) {
+        await playSystemSound(clickSound);
         audio.pause();
         audio.currentTime = 0;
         isPlaying = false;
