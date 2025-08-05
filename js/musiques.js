@@ -37,9 +37,23 @@ let isDraggingSpeed = false;
 let casseteLoaded = false;
 
 
+// Fonction utilitaire pour gérer les sons système
+function playSystemSound(sound) {
+    if (sound.readyState >= 2) { // Vérifie si le son est chargé
+        sound.currentTime = 0;
+        const playPromise = sound.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Playback error:", error);
+            });
+        }
+    }
+}
+
+// Remplacer la fonction playClickSound existante
+
 function playClickSound() {
-    clickSound.currentTime = 0;
-    clickSound.play();
+    playSystemSound(clickSound);
 }
 
 [playBtn, pauseBtn, stopBtn, prevBtn, nextBtn].forEach(btn => {
@@ -133,10 +147,16 @@ slot.addEventListener('drop', e => {
 
 // Fonction pour charger une cassette
 function loadCassette(src) {
+    // Arrêter la lecture en cours si elle existe
+    if (audio.src) {
+        audio.pause();
+        audio.currentTime = 0;
+    }
+    
     // Jouer le son d'insertion
-    insertSound.currentTime = 0;
-    insertSound.play();
+    playSystemSound(insertSound);
 
+    // Réinitialiser l'état
     isPlaying = false;
     playBtn.classList.remove('active');
     pauseBtn.classList.remove('active');
@@ -144,7 +164,9 @@ function loadCassette(src) {
     volumeLed.classList.remove('playing', 'paused');
     speedLed.classList.remove('playing', 'paused');
 
+    // Charger le nouveau son
     audio.src = src;
+    audio.load(); // Forcer le chargement
     casseteLoaded = true;
 
     // Trouver l'image de la cassette correspondante
@@ -184,14 +206,20 @@ function loadCassette(src) {
 // Contrôles de lecture
 playBtn.addEventListener('click', () => {
     if (casseteLoaded && audio.src) {
-        audio.play();
-        isPlaying = true;
-        playBtn.classList.add('active');
-        pauseBtn.classList.remove('active');
-        volumeLed.classList.remove('paused');
-        speedLed.classList.remove('paused');
-        volumeLed.classList.add('playing');
-        speedLed.classList.add('playing');
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                isPlaying = true;
+                playBtn.classList.add('active');
+                pauseBtn.classList.remove('active');
+                volumeLed.classList.remove('paused');
+                speedLed.classList.remove('paused');
+                volumeLed.classList.add('playing');
+                speedLed.classList.add('playing');
+            }).catch(error => {
+                console.log("Playback error:", error);
+            });
+        }
     }
 });
 
