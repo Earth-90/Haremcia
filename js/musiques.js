@@ -5,6 +5,7 @@ const cassettes = document.querySelectorAll('.cassette');
 const slot = document.getElementById('cassette-slot');
 const door = document.getElementById('door');
 const audio = document.getElementById('audio');
+audio.volume = 0.3;
 
 // Contrôles du lecteur
 const playBtn = document.getElementById('play-btn');
@@ -44,16 +45,19 @@ let fastForwardInterval = null;
 
 // Liste de positions possibles pour les post-its
 const postitPositions = [
-    { x: 10, y: 10, angle: -15 },
+    { x: 10, y: 10, angle: -25 },
     { x: 50, y: 15, angle: 10 },
-    { x: 20, y: 20, angle: -8 },
+    { x: 13, y: 20, angle: -18 },
     { x: 25, y: 12, angle: 12 },
     { x: 40, y: 30, angle: 5 },
-    { x: 10, y: 33, angle: 15 },
-    { x: 11, y: 12, angle: -10 },
-    { x: 20, y: 11, angle: 8 },
-    { x: 33, y: 12, angle: -12 },
-    { x: 31, y: 25, angle: -5 }
+    { x: 10, y: 33, angle: 35 },
+    { x: 11, y: 8, angle: -10 },
+    { x: 20, y: 11, angle: -30 },
+    { x: 33, y: 12, angle: -20 },
+    { x: 22, y: 12, angle: 40 },
+    { x: 8, y: 1, angle: 8 },
+    { x: 12, y: 20, angle: -12 },
+    { x: 31, y: 25, angle: -15 }
 ];
 
 // Modifier la partie qui gère l'ajout des titres sur les cassettes
