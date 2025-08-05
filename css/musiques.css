@@ -147,34 +147,43 @@
     z-index: 1;
     display: none;
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 85px;
+    height: 85px;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translateY(-50%) rotate(var(--wheel-angle, 0deg));
+    transition: transform 0.3s ease;
 }
 
 .wheel.left {
-    top: 108px;
-    left: 97px;
+    top: 108.1px;
+    left: 80px;
 }
 
 .wheel.right {
-    top: 108px;
-    right: 100px;
+    top: 108.1px;
+    right: 82.6px;
 }
 
 .wheel.spinning {
-    animation: spin 2s linear infinite;
+    animation: spin var(--wheel-duration, 2s) linear infinite;
+}
+
+.wheel.reverse-spinning {
+    animation: reverse-spin var(--wheel-duration, 2s) linear infinite;
+}
+
+.wheel.fast-spinning {
+    animation: spin var(--wheel-duration, 1s) linear infinite;
 }
 
 @keyframes spin {
-    from {
-        transform: translateY(-50%) rotate(0deg);
-    }
+    from { transform: translateY(-50%) rotate(var(--wheel-angle, 0deg)); }
+    to { transform: translateY(-50%) rotate(calc(var(--wheel-angle, 0deg) + 360deg)); }
+}
 
-    to {
-        transform: translateY(-50%) rotate(360deg);
-    }
+@keyframes reverse-spin {
+    from { transform: translateY(-50%) rotate(var(--wheel-angle, 0deg)); }
+    to { transform: translateY(-50%) rotate(calc(var(--wheel-angle, 0deg) - 360deg)); }
 }
 
 #inserted-cassette-front,
@@ -208,8 +217,8 @@
     font-size: 14px;
     border: 1px solid #555;
     background: linear-gradient(145deg, rgba(51, 51, 51, 0.2), rgba(34, 34, 34, 0.2));
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow:
         0 2px 8px rgba(0, 0, 0, 0.4),
@@ -226,8 +235,8 @@
 #door.open {
     transform: rotateX(80deg);
     background: linear-gradient(145deg, rgba(51, 51, 51, 0.4), rgba(34, 34, 34, 0.4));
-    backdrop-filter: blur(1px);
-    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(0.5px);
+    -webkit-backdrop-filter: blur(0.5px);
 }
 
 /* Panneau de contrôles */

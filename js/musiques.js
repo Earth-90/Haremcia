@@ -10,8 +10,8 @@ const audio = document.getElementById('audio');
 const playBtn = document.getElementById('play-btn');
 const pauseBtn = document.getElementById('pause-btn');
 const stopBtn = document.getElementById('stop-btn');
-const prevBtn = document.getElementById('prev-btn');
-const nextBtn = document.getElementById('next-btn');
+const rewindBtn = document.getElementById('prev-btn');
+const fforwardBtn = document.getElementById('next-btn');
 const positionSlider = document.getElementById('position-slider');
 const currentTimeSpan = document.getElementById('current-time');
 const totalTimeSpan = document.getElementById('total-time');
@@ -24,9 +24,11 @@ const speedLed = document.getElementById('speed-led');
 
 const clickSound = document.getElementById('click-sound');
 const insertSound = document.getElementById('insert-sound');
+const rewindSound = document.getElementById('rewind-sound');
+const fforwardSound = document.getElementById('fforward-sound');
 
 // Variables d'état
-let currentIndex = 3;
+let currentIndex = Math.floor(Math.random() * cassettes.length);
 const cassetteWidth = 334;
 let isScrolling = false;
 let isPlaying = false;
@@ -35,6 +37,10 @@ let currentSpeed = 1.0;
 let isDraggingVolume = false;
 let isDraggingSpeed = false;
 let casseteLoaded = false;
+let isRewinding = false;
+let isFastForwarding = false;
+let rewindInterval = null;
+let fastForwardInterval = null;
 
 // Liste de positions possibles pour les post-its
 const postitPositions = [
@@ -78,15 +84,15 @@ cassettes.forEach(cassette => {
 
     const postitText = document.createElement('div');
     postitText.className = 'postit-text';
-    
+
     // Création de la structure du texte avec titre et auteur
     const title = document.createElement('span');
     title.textContent = cassette.dataset.title;
-    
+
     const author = document.createElement('span');
     author.className = 'author';
     author.textContent = `(${cassette.dataset.author})`;
-    
+
     postitText.appendChild(title);
     postitText.appendChild(author);
 
@@ -269,18 +275,15 @@ function loadCassette(src) {
 // Contrôles de lecture
 playBtn.addEventListener('click', async () => {
     if (casseteLoaded && audio.src) {
-        // D'abord jouer le son de clic
+        stopAllOperations();
         await playSystemSound(clickSound);
 
-        // Ensuite lancer la musique
         const playPromise = audio.play();
         if (playPromise !== undefined) {
             playPromise.then(() => {
                 isPlaying = true;
-                playBtn.classList.add('active');
-                pauseBtn.classList.remove('active');
-                volumeLed.classList.remove('paused');
-                speedLed.classList.remove('paused');
+                updateButtons(playBtn);
+                updateWheels('spinning');
                 volumeLed.classList.add('playing');
                 speedLed.classList.add('playing');
             }).catch(error => {
@@ -295,8 +298,8 @@ pauseBtn.addEventListener('click', async () => {
         await playSystemSound(clickSound);
         audio.pause();
         isPlaying = false;
-        pauseBtn.classList.add('active');
-        playBtn.classList.remove('active');
+        updateButtons(pauseBtn);
+        updateWheels(null);
         volumeLed.classList.remove('playing');
         speedLed.classList.remove('playing');
         volumeLed.classList.add('paused');
@@ -307,19 +310,56 @@ pauseBtn.addEventListener('click', async () => {
 stopBtn.addEventListener('click', async () => {
     if (casseteLoaded) {
         await playSystemSound(clickSound);
-        audio.pause();
+        stopAllOperations();
         audio.currentTime = 0;
-        isPlaying = false;
-        playBtn.classList.remove('active');
-        pauseBtn.classList.remove('active');
-        stopBtn.classList.add('active');
-        volumeLed.classList.remove('playing', 'paused');
-        speedLed.classList.remove('playing', 'paused');
-        setTimeout(() => stopBtn.classList.remove('active'), 200);
+        updateButtons(stopBtn);
+        setTimeout(() => updateButtons(null), 200);
     }
 });
 
-// Contrôle des boutons knob rotatifs
+// Ajouter ces fonctions utilitaires
+function updateWheels(state) {
+    if (!casseteLoaded) return;
+
+    const wheels = document.querySelectorAll('.wheel');
+    wheels.forEach(wheel => {
+        // Capturer l'angle actuel avant de changer d'état
+        const computedStyle = window.getComputedStyle(wheel);
+        const matrix = new WebKitCSSMatrix(computedStyle.transform);
+        const angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+        wheel.style.setProperty('--start-angle', `${angle}deg`);
+
+        // Appliquer le nouvel état
+        wheel.classList.remove('spinning', 'reverse-spinning', 'fast-spinning');
+        if (state) {
+            wheel.classList.add(state);
+        }
+    });
+}
+
+function updateButtons(activeButton) {
+    const buttons = [playBtn, pauseBtn, stopBtn, rewindBtn, fforwardBtn];
+    buttons.forEach(button => button.classList.remove('active'));
+    if (activeButton) {
+        activeButton.classList.add('active');
+    }
+}
+
+function stopAllOperations() {
+    if (isRewinding) stopRewinding();
+    if (isFastForwarding) stopFastForwarding();
+    if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+    }
+
+    stopWheels();
+    updateButtons(null);
+    volumeLed.classList.remove('playing', 'paused');
+    speedLed.classList.remove('playing', 'paused');
+}
+
+
 function setupKnob(knob, valueDisplay, minValue, maxValue, initialValue, suffix, callback) {
     let startAngle = 0;
     let currentValue = initialValue;
@@ -328,6 +368,32 @@ function setupKnob(knob, valueDisplay, minValue, maxValue, initialValue, suffix,
     // Position initiale du knob
     const initialRotation = ((currentValue - minValue) / (maxValue - minValue)) * 270 - 135;
     knob.style.transform = `rotate(${initialRotation}deg)`;
+    valueDisplay.textContent = currentValue.toFixed(suffix === '%' ? 0 : 1) + suffix;
+
+    const updateValue = (value) => {
+        currentValue = value;
+        const rotation = ((value - minValue) / (maxValue - minValue)) * 270 - 135;
+        knob.style.transform = `rotate(${rotation}deg)`;
+        valueDisplay.textContent = value.toFixed(suffix === '%' ? 0 : 1) + suffix;
+        callback(value);
+
+        // Mettre à jour la vitesse des roues si c'est le knob de vitesse
+        if (knob === speedKnob) {
+            document.documentElement.style.setProperty('--wheel-duration', `${2 / value}s`);
+            const wheels = document.querySelectorAll('.wheel');
+            wheels.forEach(wheel => {
+                // Préserver l'animation actuelle
+                const currentAnimation = wheel.classList.contains('spinning') ? 'spinning' :
+                    wheel.classList.contains('reverse-spinning') ? 'reverse-spinning' :
+                        wheel.classList.contains('fast-spinning') ? 'fast-spinning' : null;
+
+                if (currentAnimation) {
+                    // Au lieu de retirer et réajouter la classe, on met simplement à jour la durée CSS
+                    wheel.style.animationDuration = `${2 / value}s`;
+                }
+            });
+        }
+    };
 
     knob.addEventListener('mousedown', (e) => {
         isDragging = true;
@@ -352,14 +418,9 @@ function setupKnob(knob, valueDisplay, minValue, maxValue, initialValue, suffix,
 
         const sensitivity = 0.17;
         const valueChange = angleDiff * sensitivity * (maxValue - minValue);
-        currentValue = Math.max(minValue, Math.min(maxValue, currentValue + valueChange));
+        const newValue = Math.max(minValue, Math.min(maxValue, currentValue + valueChange));
 
-        const rotation = ((currentValue - minValue) / (maxValue - minValue)) * 270 - 135;
-        knob.style.transform = `rotate(${rotation}deg)`;
-
-        valueDisplay.textContent = currentValue.toFixed(suffix === '%' ? 0 : 1) + suffix;
-        callback(currentValue);
-
+        updateValue(newValue);
         startAngle = currentAngle;
     });
 
@@ -372,12 +433,12 @@ function setupKnob(knob, valueDisplay, minValue, maxValue, initialValue, suffix,
 }
 
 // Configuration des knobs
-setupKnob(volumeKnob, volumeValue, 0, 100, 50, '%', (value) => {
+setupKnob(volumeKnob, volumeValue, 0, 100, 30, '%', (value) => {
     currentVolume = value / 100;
     audio.volume = currentVolume;
 });
 
-setupKnob(speedKnob, speedValue, 0.25, 2.0, 1.0, 'x', (value) => {
+setupKnob(speedKnob, speedValue, 0.1, 3.0, 1.0, 'x', (value) => {
     currentSpeed = value;
     audio.playbackRate = currentSpeed;
 });
@@ -437,3 +498,136 @@ carouselContainer.addEventListener('touchend', (e) => {
         updateCarousel();
     }
 });
+
+// Ajouter les gestionnaires d'événements pour rewind
+rewindBtn.addEventListener('click', async () => {
+    if (!casseteLoaded) return;
+
+    if (isRewinding) {
+        // Arrêter le rewind
+        stopRewinding();
+    } else {
+        // Démarrer le rewind
+        startRewinding();
+    }
+});
+
+// Ajouter les gestionnaires d'événements pour fast forward
+fforwardBtn.addEventListener('click', async () => {
+    if (!casseteLoaded) return;
+
+    if (isFastForwarding) {
+        // Arrêter le fast forward
+        stopFastForwarding();
+    } else {
+        // Démarrer le fast forward
+        startFastForwarding();
+    }
+});
+
+// Fonctions pour le rewind
+function startRewinding() {
+    if (!casseteLoaded || audio.currentTime <= 0) return;
+
+    stopAllOperations();
+    isRewinding = true;
+    updateButtons(rewindBtn);
+    updateWheels('reverse-spinning');
+    playSystemSound(rewindSound);
+
+    const rewindSpeed = audio.duration / 3;
+    const interval = 5;
+    const step = rewindSpeed * (interval / 1000);
+
+    rewindInterval = setInterval(() => {
+        audio.currentTime = Math.max(0, audio.currentTime - step);
+        if (audio.currentTime <= 0) {
+            stopRewinding();
+        }
+    }, interval);
+}
+
+function stopRewinding() {
+    isRewinding = false;
+    rewindBtn.classList.remove('active');
+    clearInterval(rewindInterval);
+    rewindSound.pause();
+    rewindSound.currentTime = 0;
+    stopWheels();
+}
+
+// Fonctions pour le fast forward
+function startFastForwarding() {
+    if (!casseteLoaded || audio.currentTime >= audio.duration) return;
+
+    stopAllOperations();
+    isFastForwarding = true;
+    updateButtons(fforwardBtn);
+    updateWheels('fast-spinning');
+    playSystemSound(fforwardSound);
+
+    const ffSpeed = audio.duration / 3;
+    const interval = 5;
+    const step = ffSpeed * (interval / 1000);
+
+    fastForwardInterval = setInterval(() => {
+        audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
+        if (audio.currentTime >= audio.duration) {
+            stopFastForwarding();
+        }
+    }, interval);
+}
+
+function stopFastForwarding() {
+    isFastForwarding = false;
+    fforwardBtn.classList.remove('active');
+    clearInterval(fastForwardInterval);
+    fforwardSound.pause();
+    fforwardSound.currentTime = 0;
+    stopWheels();
+}
+
+// Ajouter cette fonction pour gérer l'arrêt des roues
+function stopWheels() {
+    const wheels = document.querySelectorAll('.wheel');
+    wheels.forEach(wheel => {
+        // Capturer l'angle actuel de rotation
+        const computedStyle = window.getComputedStyle(wheel);
+        const matrix = new WebKitCSSMatrix(computedStyle.transform);
+        const angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+
+        // Arrêter l'animation et maintenir la position
+        wheel.style.setProperty('--start-angle', `${angle}deg`);
+        wheel.classList.remove('spinning', 'reverse-spinning', 'fast-spinning');
+    });
+}
+
+function updateWheelsSpeed(speed) {
+    document.documentElement.style.setProperty('--wheel-duration', `${2 / speed}s`);
+}
+
+function updateWheels(state) {
+    if (!casseteLoaded) return;
+
+    const wheels = document.querySelectorAll('.wheel');
+    wheels.forEach(wheel => {
+        // Sauvegarder l'angle actuel avant de changer d'état
+        if (!wheel.style.getPropertyValue('--wheel-angle')) {
+            wheel.style.setProperty('--wheel-angle', '0deg');
+        }
+
+        if (!state) {
+            // Si on arrête l'animation, capturer l'angle final
+            const computedStyle = window.getComputedStyle(wheel);
+            const matrix = new WebKitCSSMatrix(computedStyle.transform);
+            const angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
+            wheel.style.setProperty('--wheel-angle', `${angle}deg`);
+        }
+
+        // Mettre à jour l'état
+        wheel.classList.remove('spinning', 'reverse-spinning', 'fast-spinning');
+        if (state) {
+            wheel.classList.add(state);
+        }
+    });
+}
