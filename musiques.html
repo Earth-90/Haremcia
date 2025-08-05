@@ -1,101 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
-	<title>Musiques</title>
-	<meta charset="utf-8">
-	<link rel="stylesheet" href="css/style1.css">
-	<link rel="stylesheet" href="css/header.css">
-	<link rel="stylesheet" href="css/audio.css">
-	<link rel="shortcut icon" href="images/icons/mute-off.png" />
-	<script src="js/code.js"></script>
-	<script src="js/audio.js"></script>
+  <meta charset="UTF‑8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Cassette Player</title>
+  <link rel="stylesheet" href="css/musiques.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/style1.css">
+  <script src="js/code.js"></script>
 </head>
 
+<audio id="click-sound" src="sons/sounds/click.mp3"></audio>
+<audio id="insert-sound" src="sons/sounds/switch.mp3"></audio>
+
+
 <body>
-	<div id="header"></div>
+  <div id="header"></div>
 
-	<h2>Les hymnes des nations de l'Ouest .</h2>
+  <h1>Lecteur de cassette</h1>
+  <h2>Permet d'écouter vos meilleurs sons</h2>
 
-	<div class="playlist">
-		<div class="song">
-			<img src="sons/Cover/Haremcia Cover.jpeg" alt="">
-			<h3>L'hymne d'Haremcia</h3>
-			<h7>Davyd Lopaiz-Castella</h7>
+  <div id="carousel-container">
+    <div id="carousel-inner">
+      <img src="images/musique/cs1.png" class="cassette" data-src="songs/siren_song.mp3">
+      <img src="images/musique/cs2.png" class="cassette" data-src="songs/complex_hymne.mp3">
+      <img src="images/musique/cs3.png" class="cassette" data-src="songs/ged_hymne.mp3">
+      <img src="images/musique/cs4.png" class="cassette" data-src="songs/haremcia_hymne.mp3">
+      <img src="images/musique/cs5.png" class="cassette" data-src="songs/urss_hymne.mp3">
+      <img src="images/musique/cs6.png" class="cassette" data-src="songs/hell.mp3">
+      <img src="images/musique/cs7.png" class="cassette" data-src="songs/audio3.mp3">
+      <img src="images/musique/cs8.png" class="cassette" data-src="songs/audio4.mp3">
+    </div>
+  </div>
 
-			<audio class="audio-player" src="sons/Haremcia Hymne v2.mp3"></audio>
-			<div class="custom-audio-player">
-				<button class="play-button control-button"><img src="images/icons/play.png" alt=""></button>
-				<button class="pause-button control-button"><img src="images/icons/pause.png" alt=""></button>
-				<button class="stop-button control-button"><img src="images/icons/stop.png" alt=""></button>
-				<div class="progress-container">
-					<div class="progress-bar"></div>
-				</div>
-				<span class="timestamp">0:00 / 3:28</span>
-				<button class="mute-button control-button"><img src="images/icons/mute-off.png" alt=""></button>
-				<input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
-			</div>
-		</div>
-		<div class="song">
-			<img src="sons/Cover/Complex Cover.png" alt="">
-			<h3>Complex Song</h3>
-			<h7>[Unknown]</h7>
+  <div class="player-container">
+    <div id="player">
+      <div id="cassette-slot">
+        <div class="wheels">
+          <img src="images/musique/cs_wheel.png" class="wheel left" alt="">
+          <img src="images/musique/cs_wheel.png" class="wheel right" alt="">
+        </div>
+        <div id="inserted-cassette-back"></div>
+        <div id="inserted-cassette-front"></div>
+        <div id="door" class="closed"></div>
+      </div>
 
-			<audio class="audio-player" src="sons/Complex Song.mp3"></audio>
-			<div class="custom-audio-player">
-				<button class="play-button control-button"><img src="images/icons/play.png" alt=""></button>
-				<button class="pause-button control-button"><img src="images/icons/pause.png" alt=""></button>
-				<button class="stop-button control-button"><img src="images/icons/stop.png" alt=""></button>
-				<div class="progress-container">
-					<div class="progress-bar"></div>
-				</div>
-				<span class="timestamp">0:00 / 2:48</span>
-				<button class="mute-button control-button"><img src="images/icons/mute-off.png" alt=""></button>
-				<input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
-			</div>
-		</div>
+      <div class="control-panel">
+        <!-- Contrôle de volume -->
+        <div class="volume-control">
+          <div class="status-led" id="volume-led"></div>
+          <div class="knob-label">Volume</div>
+          <div class="knob-container">
+            <div class="knob" id="volume-knob"></div>
+          </div>
+          <div class="knob-value" id="volume-value">50%</div>
+        </div>
 
-		<div class="song">
-			<img src="sons/Cover/GED Cover.jpeg" alt="">
-			<h3>L'hymne du GED</h3>
-			<h7>IA v52.6.14.2</h7>
+        <!-- Contrôles de lecture -->
+        <div class="playback-controls">
+          <button class="control-btn" id="prev-btn">⏮</button>
+          <button class="control-btn" id="play-btn">▶</button>
+          <button class="control-btn" id="pause-btn">⏸</button>
+          <button class="control-btn" id="stop-btn">⏹</button>
+          <button class="control-btn" id="next-btn">⏭</button>
+        </div>
 
-			<audio class="audio-player" src="sons/GED Hymne v2.mp3"></audio>
-			<div class="custom-audio-player">
-				<button class="play-button control-button"><img src="images/icons/play.png" alt=""></button>
-				<button class="pause-button control-button"><img src="images/icons/pause.png" alt=""></button>
-				<button class="stop-button control-button"><img src="images/icons/stop.png" alt=""></button>
-				<div class="progress-container">
-					<div class="progress-bar"></div>
-				</div>
-				<span class="timestamp">0:00 / 3:56</span>
-				<button class="mute-button control-button"><img src="images/icons/mute-off.png" alt=""></button>
-				<input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
-			</div>
-		</div>
+        <!-- Contrôle de vitesse -->
+        <div class="speed-control">
+          <div class="status-led" id="speed-led"></div>
+          <div class="knob-label">Speed</div>
+          <div class="knob-container">
+            <div class="knob" id="speed-knob"></div>
+          </div>
+          <div class="knob-value" id="speed-value">1.0x</div>
+        </div>
 
-		<div class="song">
-			<img src="sons/Cover/Siren Cover.png" alt="">
-			<h3>Siren Song</h3>
-			<h7>CPX-368</h7>
+        <!-- Slider de position -->
+        <div class="position-slider">
+          <input type="range" min="0" max="100" value="0" class="slider" id="position-slider">
+          <div class="time-display">
+            <span id="current-time">00:00</span>
+            <span id="total-time">00:00</span>
+          </div>
+        </div>
+      </div>
 
-			<audio class="audio-player" src="sons/Siren Song.mp3"></audio>
-			<div class="custom-audio-player">
-				<button class="play-button control-button"><img src="images/icons/play.png" alt=""></button>
-				<button class="pause-button control-button"><img src="images/icons/pause.png" alt=""></button>
-				<button class="stop-button control-button"><img src="images/icons/stop.png" alt=""></button>
-				<div class="progress-container">
-					<div class="progress-bar"></div>
-				</div>
-				<span class="timestamp">0:00 / 3:04</span>
-				<button class="mute-button control-button"><img src="images/icons/mute-off.png" alt=""></button>
-				<input type="range" class="volume-slider" min="0" max="1" step="0.01" value="1">
-			</div>
-		</div>
+      <audio id="audio"></audio>
+    </div>
+  </div>
 
-	</div>
-
-
+  <script src="js/musiques.js"></script>
 </body>
 
 </html>
