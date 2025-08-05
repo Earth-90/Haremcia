@@ -36,6 +36,63 @@ let isDraggingVolume = false;
 let isDraggingSpeed = false;
 let casseteLoaded = false;
 
+// Liste de positions possibles pour les post-its
+const postitPositions = [
+    { x: 10, y: 10, angle: -15 },
+    { x: 50, y: 15, angle: 10 },
+    { x: 20, y: 20, angle: -8 },
+    { x: 25, y: 12, angle: 12 },
+    { x: 40, y: 30, angle: 5 },
+    { x: 10, y: 33, angle: 15 },
+    { x: 11, y: 12, angle: -10 },
+    { x: 20, y: 11, angle: 8 },
+    { x: 33, y: 12, angle: -12 },
+    { x: 31, y: 25, angle: -5 }
+];
+
+// Modifier la partie qui gère l'ajout des titres sur les cassettes
+cassettes.forEach(cassette => {
+    // Créer un conteneur pour chaque cassette
+    const cassetteContainer = document.createElement('div');
+    cassetteContainer.className = 'cassette-container';
+    cassetteContainer.style.position = 'relative';
+
+    // Obtenir le parent de la cassette
+    const parent = cassette.parentElement;
+
+    // Remplacer la cassette par le conteneur
+    parent.insertBefore(cassetteContainer, cassette);
+    cassetteContainer.appendChild(cassette);
+
+    // Ajouter un post-it avec une position aléatoire
+    const postit = document.createElement('div');
+    postit.className = 'postit';
+
+    // Choisir une position aléatoire
+    const position = postitPositions[Math.floor(Math.random() * postitPositions.length)];
+
+    postit.style.left = `${position.x}%`;
+    postit.style.top = `${position.y}%`;
+    postit.style.setProperty('--rotate-angle', `${position.angle}deg`);
+    postit.style.transform = `rotate(${position.angle}deg)`;
+
+    const postitText = document.createElement('div');
+    postitText.className = 'postit-text';
+    
+    // Création de la structure du texte avec titre et auteur
+    const title = document.createElement('span');
+    title.textContent = cassette.dataset.title;
+    
+    const author = document.createElement('span');
+    author.className = 'author';
+    author.textContent = `(${cassette.dataset.author})`;
+    
+    postitText.appendChild(title);
+    postitText.appendChild(author);
+
+    postit.appendChild(postitText);
+    cassetteContainer.appendChild(postit);
+});
 
 // Fonction utilitaire pour gérer les sons système
 async function playSystemSound(sound) {
@@ -58,18 +115,25 @@ function playClickSound() {
     playSystemSound(clickSound);
 }
 
-
-// Fonction pour mettre à jour la position du carrousel
+// Mettre à jour la fonction updateCarousel pour gérer les nouveaux conteneurs
 function updateCarousel() {
     const offset = -currentIndex * cassetteWidth;
     carouselInner.style.transform = `translateX(${offset}px)`;
 
-    // Mettre à jour les classes des cassettes et la capacité de drag
     cassettes.forEach((cassette, index) => {
         const isCenter = index === currentIndex;
         cassette.classList.toggle('center', isCenter);
-        // Seule la cassette centrale est draggable
         cassette.draggable = isCenter;
+
+        // Mettre à jour l'échelle du post-it
+        const container = cassette.parentElement;
+        const postit = container.querySelector('.postit');
+
+        if (isCenter) {
+            postit.style.transform = `rotate(${postit.style.getPropertyValue('--rotate-angle')}) scale(1.2)`;
+        } else {
+            postit.style.transform = `rotate(${postit.style.getPropertyValue('--rotate-angle')}) scale(0.8)`;
+        }
     });
 }
 
@@ -151,7 +215,7 @@ function loadCassette(src) {
         audio.pause();
         audio.currentTime = 0;
     }
-    
+
     // Jouer le son d'insertion
     playSystemSound(insertSound);
 
@@ -207,7 +271,7 @@ playBtn.addEventListener('click', async () => {
     if (casseteLoaded && audio.src) {
         // D'abord jouer le son de clic
         await playSystemSound(clickSound);
-        
+
         // Ensuite lancer la musique
         const playPromise = audio.play();
         if (playPromise !== undefined) {

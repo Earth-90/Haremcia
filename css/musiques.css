@@ -3,6 +3,11 @@
     src: url("font/MONO.ttf") format('truetype');
 }
 
+@font-face {
+    font-family: 'Handwrite';
+    src: url("font/KGSimplytheBest.ttf") format('truetype');
+}
+
 #carousel-container {
     user-select: none;
     width: 100%;
@@ -40,11 +45,6 @@
     object-fit: cover;
 }
 
-.cassette:hover {
-    transform: scale(0.85);
-}
-
-
 .cassette.center {
     transform: scale(1.2);
     opacity: 1;
@@ -53,8 +53,49 @@
     cursor: grab;
 }
 
-.cassette.center:hover {
-    transform: scale(1.3);
+
+.cassette-container {
+    transition: all 0.4s ease;
+}
+
+.cassette-container:hover {
+    transform: scale(1.15);
+}
+
+
+
+/* Ajouter après les styles existants */
+.postit {
+    transition: all 0.4s ease;
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background-image: url('../images/musique/post-it.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.postit-text {
+    font-family: 'Handwrite';
+    color: #000;
+    font-size: 15px;
+    text-align: center;
+    max-width: 70px;
+    word-wrap: break-word;
+}
+
+/* Ajout du style spécifique pour l'auteur */
+.postit-text .author {
+    font-size: 10px;
+    opacity: 0.8;
+    display: block;
+    margin-top: 2px;
 }
 
 .player-container {
