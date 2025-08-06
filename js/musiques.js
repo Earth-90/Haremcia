@@ -10,7 +10,6 @@ audio.volume = 0.3;
 // Contrôles du lecteur
 const playBtn = document.getElementById('play-btn');
 const pauseBtn = document.getElementById('pause-btn');
-const stopBtn = document.getElementById('stop-btn');
 const rewindBtn = document.getElementById('prev-btn');
 const fforwardBtn = document.getElementById('next-btn');
 const positionSlider = document.getElementById('position-slider');
@@ -22,6 +21,7 @@ const volumeValue = document.getElementById('volume-value');
 const speedValue = document.getElementById('speed-value');
 const volumeLed = document.getElementById('volume-led');
 const speedLed = document.getElementById('speed-led');
+const loopBtn = document.getElementById('loop-btn');
 
 const clickSound = document.getElementById('click-sound');
 const insertSound = document.getElementById('insert-sound');
@@ -42,6 +42,7 @@ let isRewinding = false;
 let isFastForwarding = false;
 let rewindInterval = null;
 let fastForwardInterval = null;
+let isLoopMode = false;
 
 // Liste de positions possibles pour les post-its
 const postitPositions = [
@@ -105,14 +106,17 @@ cassettes.forEach(cassette => {
 });
 
 // Fonction utilitaire pour gérer les sons système
-async function playSystemSound(sound) {
+async function playSystemSound(sound, loop = false) {
     if (sound.readyState >= 2) {
         sound.currentTime = 0;
+        sound.loop = loop;  // Ajouter le mode loop
         try {
             await sound.play();
-            await new Promise(resolve => {
-                sound.onended = resolve;
-            });
+            if (!loop) {
+                await new Promise(resolve => {
+                    sound.onended = resolve;
+                });
+            }
         } catch (error) {
             console.log("Playback error:", error);
         }
@@ -233,7 +237,6 @@ function loadCassette(src) {
     isPlaying = false;
     playBtn.classList.remove('active');
     pauseBtn.classList.remove('active');
-    stopBtn.classList.remove('active');
     volumeLed.classList.remove('playing', 'paused');
     speedLed.classList.remove('playing', 'paused');
 
@@ -269,6 +272,36 @@ function loadCassette(src) {
 
     audio.addEventListener('ended', () => {
         wheels.forEach(wheel => wheel.classList.remove('spinning'));
+        if (isLoopMode) {
+            // On utilise startRewinding() et on ajoute un écouteur pour relancer la lecture
+            const handleRewind = () => {
+                if (audio.currentTime <= 0) {
+                    // On arrête d'écouter cet événement
+                    audio.removeEventListener('timeupdate', handleRewind);
+                    // On arrête le rewind
+                    stopRewinding();
+                    // On relance la lecture
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            wheels.forEach(wheel => wheel.classList.add('spinning'));
+                        }).catch(error => {
+                            console.log("Playback error:", error);
+                        });
+                    }
+                }
+            };
+
+            // On ajoute l'écouteur pour surveiller le rewind
+            audio.addEventListener('timeupdate', handleRewind);
+            // On démarre le rewind
+            startRewinding();
+        } else {
+            isPlaying = false;
+            updateButtons(null);
+            volumeLed.classList.remove('playing');
+            speedLed.classList.remove('playing');
+        }
     });
 
     audio.addEventListener('loadedmetadata', () => {
@@ -297,11 +330,24 @@ playBtn.addEventListener('click', async () => {
     }
 });
 
+// Modifier l'événement du bouton pause
 pauseBtn.addEventListener('click', async () => {
     if (casseteLoaded) {
         await playSystemSound(clickSound);
+        
+        // Arrêter toutes les opérations en cours
+        if (isRewinding) {
+            stopRewinding();
+        }
+        if (isFastForwarding) {
+            stopFastForwarding();
+        }
+        
+        // Arrêter la lecture
         audio.pause();
         isPlaying = false;
+        
+        // Mettre à jour l'interface
         updateButtons(pauseBtn);
         updateWheels(null);
         volumeLed.classList.remove('playing');
@@ -311,13 +357,11 @@ pauseBtn.addEventListener('click', async () => {
     }
 });
 
-stopBtn.addEventListener('click', async () => {
+loopBtn.addEventListener('click', async () => {
     if (casseteLoaded) {
         await playSystemSound(clickSound);
-        stopAllOperations();
-        audio.currentTime = 0;
-        updateButtons(stopBtn);
-        setTimeout(() => updateButtons(null), 200);
+        isLoopMode = !isLoopMode;
+        loopBtn.classList.toggle('active', isLoopMode);
     }
 });
 
@@ -342,20 +386,37 @@ function updateWheels(state) {
 }
 
 function updateButtons(activeButton) {
-    const buttons = [playBtn, pauseBtn, stopBtn, rewindBtn, fforwardBtn];
+    const buttons = [playBtn, rewindBtn, fforwardBtn];  // Retirer pauseBtn de la liste
     buttons.forEach(button => button.classList.remove('active'));
+    
     if (activeButton) {
         activeButton.classList.add('active');
+    }
+
+    // Gérer le bouton pause séparément
+    if (isPlaying && !isRewinding && !isFastForwarding) {
+        pauseBtn.classList.remove('active');  // Le bouton pause est actif seulement quand on est en pause
+    } else if (!isPlaying && !isRewinding && !isFastForwarding) {
+        pauseBtn.classList.add('active');
+    } else {
+        pauseBtn.classList.remove('active');
     }
 }
 
 function stopAllOperations() {
-    if (isRewinding) stopRewinding();
-    if (isFastForwarding) stopFastForwarding();
-    if (isPlaying) {
-        audio.pause();
-        isPlaying = false;
+    if (isRewinding) {
+        stopRewinding();
+        rewindSound.pause();
+        rewindSound.currentTime = 0;
     }
+    if (isFastForwarding) {
+        stopFastForwarding();
+        fforwardSound.pause();
+        fforwardSound.currentTime = 0;
+    }
+
+    isPlaying = false;
+    audio.pause();
 
     stopWheels();
     updateButtons(null);
@@ -537,9 +598,9 @@ function startRewinding() {
     isRewinding = true;
     updateButtons(rewindBtn);
     updateWheels('reverse-spinning');
-    playSystemSound(rewindSound);
+    playSystemSound(rewindSound, true);  // Ajouter true pour le mode loop
 
-    const rewindSpeed = audio.duration / 3;
+    const rewindSpeed = isLoopMode ? audio.duration / 2 : audio.duration / 3;
     const interval = 5;
     const step = rewindSpeed * (interval / 1000);
 
@@ -568,7 +629,18 @@ function startFastForwarding() {
     isFastForwarding = true;
     updateButtons(fforwardBtn);
     updateWheels('fast-spinning');
-    playSystemSound(fforwardSound);
+    
+    // Précharger le son avant de le jouer
+    const playFF = async () => {
+        fforwardSound.currentTime = 0;
+        fforwardSound.loop = true;
+        try {
+            await fforwardSound.play();
+        } catch (error) {
+            console.log("FF sound error:", error);
+        }
+    };
+    playFF();
 
     const ffSpeed = audio.duration / 3;
     const interval = 5;
