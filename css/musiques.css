@@ -140,11 +140,10 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 1;
+    z-index: 2;
 }
 
 .wheel {
-    z-index: 1;
     display: none;
     position: absolute;
     width: 85px;
@@ -177,13 +176,23 @@
 }
 
 @keyframes spin {
-    from { transform: translateY(-50%) rotate(var(--wheel-angle, 0deg)); }
-    to { transform: translateY(-50%) rotate(calc(var(--wheel-angle, 0deg) + 360deg)); }
+    from {
+        transform: translateY(-50%) rotate(var(--wheel-angle, 0deg));
+    }
+
+    to {
+        transform: translateY(-50%) rotate(calc(var(--wheel-angle, 0deg) + 360deg));
+    }
 }
 
 @keyframes reverse-spin {
-    from { transform: translateY(-50%) rotate(var(--wheel-angle, 0deg)); }
-    to { transform: translateY(-50%) rotate(calc(var(--wheel-angle, 0deg) - 360deg)); }
+    from {
+        transform: translateY(-50%) rotate(var(--wheel-angle, 0deg));
+    }
+
+    to {
+        transform: translateY(-50%) rotate(calc(var(--wheel-angle, 0deg) - 360deg));
+    }
 }
 
 #inserted-cassette-front,
@@ -191,7 +200,6 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    z-index: 2;
     display: none;
     background-size: contain;
     background-position: center;
@@ -199,7 +207,12 @@
 }
 
 #inserted-cassette-back {
+    z-index: 1;
     background-image: url("../images/musique/cs_back_reader.png");
+}
+
+#inserted-cassette-front {
+    z-index: 3;
 }
 
 #door {

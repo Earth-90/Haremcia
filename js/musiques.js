@@ -45,22 +45,13 @@ let fastForwardInterval = null;
 let isLoopMode = false;
 
 // Liste de positions possibles pour les post-its
-const postitPositions = [
-    { x: 10, y: 10, angle: -25 },
-    { x: 50, y: 15, angle: 10 },
-    { x: 13, y: 20, angle: -18 },
-    { x: 25, y: 12, angle: 12 },
-    { x: 40, y: 30, angle: 5 },
-    { x: 10, y: 33, angle: 35 },
-    { x: 11, y: 8, angle: -10 },
-    { x: 20, y: 11, angle: -30 },
-    { x: 33, y: 12, angle: -20 },
-    { x: 22, y: 12, angle: 40 },
-    { x: 8, y: 1, angle: 8 },
-    { x: 12, y: 20, angle: -12 },
-    { x: 31, y: 25, angle: -15 }
-];
-
+function getRandomPosition() {
+    return {
+        x: Math.random() * (150 - 20) + 20,  // valeurs entre 20px et 150px
+        y: Math.random() * (80 - 20) + 20,    // valeurs entre 20px et 80px
+        angle: Math.random() * (40 - -40) + -40  // valeurs entre -50 et 50 degrés
+    };
+}
 // Modifier la partie qui gère l'ajout des titres sur les cassettes
 cassettes.forEach(cassette => {
     // Créer un conteneur pour chaque cassette
@@ -80,10 +71,10 @@ cassettes.forEach(cassette => {
     postit.className = 'postit';
 
     // Choisir une position aléatoire
-    const position = postitPositions[Math.floor(Math.random() * postitPositions.length)];
+    const position = getRandomPosition();
 
-    postit.style.left = `${position.x}%`;
-    postit.style.top = `${position.y}%`;
+    postit.style.left = `${position.x}px`;
+    postit.style.top = `${position.y}px`;
     postit.style.setProperty('--rotate-angle', `${position.angle}deg`);
     postit.style.transform = `rotate(${position.angle}deg)`;
 
@@ -334,7 +325,7 @@ playBtn.addEventListener('click', async () => {
 pauseBtn.addEventListener('click', async () => {
     if (casseteLoaded) {
         await playSystemSound(clickSound);
-        
+
         // Arrêter toutes les opérations en cours
         if (isRewinding) {
             stopRewinding();
@@ -342,11 +333,11 @@ pauseBtn.addEventListener('click', async () => {
         if (isFastForwarding) {
             stopFastForwarding();
         }
-        
+
         // Arrêter la lecture
         audio.pause();
         isPlaying = false;
-        
+
         // Mettre à jour l'interface
         updateButtons(pauseBtn);
         updateWheels(null);
@@ -388,7 +379,7 @@ function updateWheels(state) {
 function updateButtons(activeButton) {
     const buttons = [playBtn, rewindBtn, fforwardBtn];  // Retirer pauseBtn de la liste
     buttons.forEach(button => button.classList.remove('active'));
-    
+
     if (activeButton) {
         activeButton.classList.add('active');
     }
@@ -629,7 +620,7 @@ function startFastForwarding() {
     isFastForwarding = true;
     updateButtons(fforwardBtn);
     updateWheels('fast-spinning');
-    
+
     // Précharger le son avant de le jouer
     const playFF = async () => {
         fforwardSound.currentTime = 0;
