@@ -236,6 +236,16 @@ function loadCassette(src) {
     audio.load(); // Forcer le chargement
     casseteLoaded = true;
 
+    // Ajouter un gestionnaire d'erreur pour le chargement du son
+    audio.onerror = () => {
+        console.log("Erreur de chargement du son:", src);
+        // Charger le son de backup
+        audio.src = 'sons/sounds/damaged.mp3';
+        audio.load();
+        // Réinitialiser le gestionnaire d'erreur
+        audio.onerror = null;
+    };
+
     // Trouver l'image de la cassette correspondante
     const selectedCassette = Array.from(cassettes).find(cassette => cassette.dataset.src === src);
     const cassetteImage = selectedCassette.src;
