@@ -231,6 +231,11 @@ function loadCassette(src) {
     volumeLed.classList.remove('playing', 'paused');
     speedLed.classList.remove('playing', 'paused');
 
+    // Réinitialiser la barre de progression et l'affichage du temps
+    positionSlider.value = 0;
+    currentTimeSpan.textContent = '00:00';
+    totalTimeSpan.textContent = '00:00';
+
     // Charger le nouveau son
     audio.src = src;
     audio.load(); // Forcer le chargement
