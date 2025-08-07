@@ -23,23 +23,20 @@
     display: flex;
     align-items: center;
     height: 100%;
-    transition: transform 0.3s ease;
+    transition: transform 0.4s ease;
     gap: 30px;
     padding: 0 calc(50vw - 150px);
-    /* Centre parfaitement la première cassette */
 }
 
 .cassette {
     width: 300px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.4s ease;
     flex-shrink: 0;
-    border: 2px solid #555;
     border-radius: 8px;
     opacity: 0.6;
     transform: scale(0.8);
     position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     background-image: url("../images/musique/cs_back.png");
     background-size: cover;
     object-fit: cover;
@@ -48,8 +45,6 @@
 .cassette.center {
     transform: scale(1.2);
     opacity: 1;
-    border-color: #ff6b35;
-    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
     cursor: grab;
 }
 
@@ -125,7 +120,7 @@
 #cassette-slot {
     width: 400px;
     height: 250px;
-    background: #111;
+    background: #444;
     border: 3px solid #444;
     position: relative;
     border-radius: 15px;
@@ -151,16 +146,21 @@
     top: 50%;
     transform: translateY(-50%) rotate(var(--wheel-angle, 0deg));
     transition: transform 0.3s ease;
+    --tape-size: 0px;
+    box-shadow: black 0px 0px 0px var(--tape-size);
+    border-radius: 50%;
 }
 
 .wheel.left {
     top: 117px;
     left: 75px;
+    --tape-size: 20px;
 }
 
 .wheel.right {
     top: 117px;
     right: 77px;
+    --tape-size: 0px;
 }
 
 .wheel.spinning {

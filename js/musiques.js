@@ -44,6 +44,9 @@ let rewindInterval = null;
 let fastForwardInterval = null;
 let isLoopMode = false;
 
+const INITIAL_TAPE_SIZE = 50; // Taille maximale de la bande en pixels
+const MIN_TAPE_SIZE = 0;
+
 // Liste de positions possibles pour les post-its
 function getRandomPosition() {
     return {
@@ -240,6 +243,15 @@ function loadCassette(src) {
     audio.src = src;
     audio.load(); // Forcer le chargement
     casseteLoaded = true;
+
+    // Initialiser la taille de la bande
+    const leftWheel = document.querySelector('.wheel.left');
+    const rightWheel = document.querySelector('.wheel.right');
+    leftWheel.style.setProperty('--tape-size', `${INITIAL_TAPE_SIZE}px`);
+    rightWheel.style.setProperty('--tape-size', `${MIN_TAPE_SIZE}px`);
+
+    // Ajouter l'écouteur pour mettre à jour la bande
+    audio.addEventListener('timeupdate', updateTapeSize);
 
     // Ajouter un gestionnaire d'erreur pour le chargement du son
     audio.onerror = () => {
@@ -603,6 +615,7 @@ function startRewinding() {
 
     rewindInterval = setInterval(() => {
         audio.currentTime = Math.max(0, audio.currentTime - step);
+        updateTapeSize(); // Mettre à jour la bande
         if (audio.currentTime <= 0) {
             stopRewinding();
         }
@@ -645,6 +658,7 @@ function startFastForwarding() {
 
     fastForwardInterval = setInterval(() => {
         audio.currentTime = Math.min(audio.duration, audio.currentTime + step);
+        updateTapeSize(); // Mettre à jour la bande
         if (audio.currentTime >= audio.duration) {
             stopFastForwarding();
         }
@@ -670,13 +684,32 @@ function stopWheels() {
         const angle = Math.atan2(matrix.b, matrix.a) * (180 / Math.PI);
 
         // Arrêter l'animation et maintenir la position
-        wheel.style.setProperty('--start-angle', `${angle}deg`);
+        wheel.style.setProperty('--wheel-angle', `${angle}deg`);
         wheel.classList.remove('spinning', 'reverse-spinning', 'fast-spinning');
     });
+    
+    // Mettre à jour la taille de la bande
+    updateTapeSize();
 }
 
 function updateWheelsSpeed(speed) {
     document.documentElement.style.setProperty('--wheel-duration', `${2 / speed}s`);
+}
+
+function updateTapeSize() {
+    if (!casseteLoaded) return;
+
+    const progress = audio.currentTime / audio.duration;
+    const leftWheel = document.querySelector('.wheel.left');
+    const rightWheel = document.querySelector('.wheel.right');
+
+    // Calculer la taille de la bande pour chaque roue
+    const leftSize = INITIAL_TAPE_SIZE * (1 - progress);
+    const rightSize = INITIAL_TAPE_SIZE * progress;
+
+    // Mettre à jour les tailles
+    leftWheel.style.setProperty('--tape-size', `${leftSize}px`);
+    rightWheel.style.setProperty('--tape-size', `${rightSize}px`);
 }
 
 function updateWheels(state) {
