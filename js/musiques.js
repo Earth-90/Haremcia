@@ -392,20 +392,11 @@ function updateWheels(state) {
 }
 
 function updateButtons(activeButton) {
-    const buttons = [playBtn, rewindBtn, fforwardBtn];  // Retirer pauseBtn de la liste
+    const buttons = [playBtn, rewindBtn, fforwardBtn, pauseBtn];  // Ajouter pauseBtn à la liste
     buttons.forEach(button => button.classList.remove('active'));
 
     if (activeButton) {
         activeButton.classList.add('active');
-    }
-
-    // Gérer le bouton pause séparément
-    if (isPlaying && !isRewinding && !isFastForwarding) {
-        pauseBtn.classList.remove('active');  // Le bouton pause est actif seulement quand on est en pause
-    } else if (!isPlaying && !isRewinding && !isFastForwarding) {
-        pauseBtn.classList.add('active');
-    } else {
-        pauseBtn.classList.remove('active');
     }
 }
 
@@ -607,7 +598,7 @@ function startRewinding() {
     playSystemSound(rewindSound, true);  // Ajouter true pour le mode loop
 
     const rewindSpeed = isLoopMode ? audio.duration / 2 : audio.duration / 3;
-    const interval = 5;
+    const interval = 10;
     const step = rewindSpeed * (interval / 1000);
 
     rewindInterval = setInterval(() => {

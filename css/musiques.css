@@ -154,13 +154,12 @@
 }
 
 .wheel.left {
-    top: 108.1px;
-    left: 80px;
+    top: 117px;
+    left: 75px;
 }
-
 .wheel.right {
-    top: 108.1px;
-    right: 82.6px;
+    top: 117px;
+    right: 77px;
 }
 
 .wheel.spinning {
@@ -201,9 +200,7 @@
     width: 100%;
     height: 100%;
     display: none;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #inserted-cassette-back {
