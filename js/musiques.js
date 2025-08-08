@@ -748,10 +748,10 @@ function updateWheels(state) {
 function renderStack() {
     folders.forEach((folder, i) => {
         const index = (i - topIndex + folders.length) % folders.length;
-        const yOffset = index * 5;
-        const rotation = index * -1;
+        const xOffset = index * 0.1;
+        const rotation = Math.random() * 10 - 5;
         folder.style.zIndex = 10 - index;
-        folder.style.transform = `translateY(${yOffset}px) rotateZ(${rotation}deg)`;
+        folder.style.transform = `translateX(${xOffset}px) rotateZ(${rotation}deg)`;
     });
 }
 
