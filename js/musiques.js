@@ -47,6 +47,11 @@ let isLoopMode = false;
 const INITIAL_TAPE_SIZE = 50; // Taille maximale de la bande en pixels
 const MIN_TAPE_SIZE = 0;
 
+const stack = document.getElementById("stack");
+let folders = Array.from(document.querySelectorAll(".folder"));
+let topIndex = Math.floor(Math.random() * folders.length);
+let currentOpenFolder = null;
+
 // Liste de positions possibles pour les post-its
 function getRandomPosition() {
     return {
@@ -738,10 +743,7 @@ function updateWheels(state) {
     });
 }
 
-const stack = document.getElementById("stack");
-let folders = Array.from(document.querySelectorAll(".folder"));
-let topIndex = folders.length - 1;
-let currentOpenFolder = null;
+
 
 function renderStack() {
     folders.forEach((folder, i) => {
@@ -783,11 +785,11 @@ function closeFolder(folder) {
     // Attendre que l'animation de fermeture soit terminée (800ms)
     setTimeout(() => {
         folder.classList.remove('closing');
-        
+
         // Restaurer le z-index d'origine basé sur l'index du dossier
         const index = folders.length - 1 - Array.from(folders).indexOf(folder);
         folder.style.zIndex = 10 - index;
-        
+
         if (currentOpenFolder === folder) {
             currentOpenFolder = null;
         }
