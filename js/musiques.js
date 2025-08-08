@@ -862,6 +862,7 @@ function addCoffeeStains(folder) {
     });
 }
 
+renderStack()
 stack.addEventListener("wheel", (e) => {
     e.preventDefault();
 
