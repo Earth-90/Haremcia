@@ -774,34 +774,101 @@ function openFolder(folder) {
     folder.classList.add('opening');
     folder.style.zIndex = 100;
     currentOpenFolder = folder;
+
+
+    addCoffeeStains(folder);
 }
 
 function closeFolder(folder) {
     folder.classList.remove('opening');
     folder.classList.add('closing');
 
-    // Attendre que l'animation de fermeture soit terminée (800ms)
+    setTimeout(() => {
+        folder.querySelectorAll('.coffee-stain').forEach(stain => {
+            stain.remove();
+        });
+
+    }, 400);
+
     setTimeout(() => {
         folder.classList.remove('closing');
-
-        // Restaurer le z-index d'origine basé sur l'index du dossier
-        folder.style.zIndex = 15
+        folder.style.zIndex = 15;
 
         if (currentOpenFolder === folder) {
             currentOpenFolder = null;
         }
-    }, 800); // Correspond à la durée de l'animation dans le CSS
+    }, 800);
 }
 
-renderStack();
+const COFFEE_STAINS = [
+    { image: 'coffee_stain1.png', chance: 50 },
+    { image: 'coffee_stain2.png', chance: 5 },
+    { image: 'coffee_stain3.png', chance: 20 },
+    { image: 'coffee_stain4.png', chance: 25 } 
+
+];
+
+function getRandomCoffeeStainProps() {
+    // Obtenir un nombre aléatoire entre 0 et 100
+    const rand = Math.random() * 100;
+    let cumulativeChance = 0;
+
+    // Sélectionner une image basée sur les pourcentages
+    let selectedStain = COFFEE_STAINS[0].image; // Image par défaut
+    for (const stain of COFFEE_STAINS) {
+        cumulativeChance += stain.chance;
+        if (rand <= cumulativeChance) {
+            selectedStain = stain.image;
+            break;
+        }
+    }
+
+    return {
+        top: Math.random() * 80 + '%',
+        left: Math.random() * 50 + '%',
+        rotation: Math.random() * 360,
+        opacity: Math.random() * 0.5 + 0.4,
+        scale: Math.random() * 0.6 + 0.5,
+        backgroundImage: `url('../images/musique/${selectedStain}')`
+    };
+}
+
+function addCoffeeStains(folder) {
+    // Supprimer les anciennes taches s'il y en a
+    folder.querySelectorAll('.coffee-stain').forEach(stain => stain.remove());
+
+    // Sélectionner les conteneurs de contenu
+    const contentContainers = folder.querySelectorAll('.folder-content');
+
+    // Nombre aléatoire de taches (1 à 2) pour chaque conteneur
+    contentContainers.forEach(container => {
+        const numStains = Math.floor(Math.random() * 2) + 1;
+
+        for (let i = 0; i < numStains; i++) {
+            const stain = document.createElement('div');
+            stain.className = 'coffee-stain';
+
+            const props = getRandomCoffeeStainProps();
+
+            stain.style.top = props.top;
+            stain.style.left = props.left;
+            stain.style.transform = `rotate(${props.rotation}deg) scale(${props.scale})`;
+            stain.style.opacity = props.opacity;
+            stain.style.backgroundImage = props.backgroundImage;
+
+
+            container.appendChild(stain);
+        }
+    });
+}
 
 stack.addEventListener("wheel", (e) => {
     e.preventDefault();
-    
+
     // Si un dossier est ouvert, on le ferme d'abord
     if (currentOpenFolder) {
         closeFolder(currentOpenFolder);
-        
+
         // On attend la fin de l'animation de fermeture avant de cycler
         setTimeout(() => {
             if (e.deltaY > 0) {
