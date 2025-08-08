@@ -756,13 +756,11 @@ function renderStack() {
 }
 
 function cycleForward() {
-    if (currentOpenFolder) closeFolder(currentOpenFolder);
     folders.unshift(folders.pop());
     renderStack();
 }
 
 function cycleBackward() {
-    if (currentOpenFolder) closeFolder(currentOpenFolder);
     folders.push(folders.shift());
     renderStack();
 }
@@ -787,8 +785,7 @@ function closeFolder(folder) {
         folder.classList.remove('closing');
 
         // Restaurer le z-index d'origine basé sur l'index du dossier
-        const index = folders.length - 1 - Array.from(folders).indexOf(folder);
-        folder.style.zIndex = 10 - index;
+        folder.style.zIndex = 15
 
         if (currentOpenFolder === folder) {
             currentOpenFolder = null;
@@ -800,10 +797,26 @@ renderStack();
 
 stack.addEventListener("wheel", (e) => {
     e.preventDefault();
-    if (e.deltaY > 0) {
-        cycleForward();
+    
+    // Si un dossier est ouvert, on le ferme d'abord
+    if (currentOpenFolder) {
+        closeFolder(currentOpenFolder);
+        
+        // On attend la fin de l'animation de fermeture avant de cycler
+        setTimeout(() => {
+            if (e.deltaY > 0) {
+                cycleForward();
+            } else {
+                cycleBackward();
+            }
+        }, 800); // Correspond à la durée de l'animation dans le CSS
     } else {
-        cycleBackward();
+        // Si aucun dossier n'est ouvert, on peut cycler directement
+        if (e.deltaY > 0) {
+            cycleForward();
+        } else {
+            cycleBackward();
+        }
     }
 });
 
