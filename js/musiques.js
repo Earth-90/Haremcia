@@ -687,7 +687,7 @@ function stopWheels() {
         wheel.style.setProperty('--wheel-angle', `${angle}deg`);
         wheel.classList.remove('spinning', 'reverse-spinning', 'fast-spinning');
     });
-    
+
     // Mettre à jour la taille de la bande
     updateTapeSize();
 }
@@ -737,3 +737,48 @@ function updateWheels(state) {
         }
     });
 }
+
+
+const stack = document.getElementById("stack");
+let folders = Array.from(document.querySelectorAll(".folder"));
+let topIndex = folders.length - 1;
+
+function renderStack() {
+    folders.forEach((folder, i) => {
+        const index = (i - topIndex + folders.length) % folders.length;
+        const yOffset = index * 5;
+        const rotation = index * -1;
+        folder.style.zIndex = 10 - index;
+        folder.style.transform = `translateY(${yOffset}px) rotateZ(${rotation}deg)`;
+        folder.classList.remove("open");
+    });
+}
+
+function cycleForward() {
+    folders.unshift(folders.pop());
+    renderStack();
+}
+
+function cycleBackward() {
+    folders.push(folders.shift());
+    renderStack();
+}
+
+renderStack();
+
+stack.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    if (e.deltaY > 0) {
+        cycleForward();
+    } else {
+        cycleBackward();
+    }
+});
+
+folders.forEach(folder => {
+    folder.addEventListener("click", () => {
+        const isOpen = folder.classList.contains("open");
+        folders.forEach(f => f.classList.remove("open"));
+        if (!isOpen) folder.classList.add("open");
+    });
+});

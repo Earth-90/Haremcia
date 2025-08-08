@@ -8,6 +8,13 @@
     src: url("font/KGSimplytheBest.ttf") format('truetype');
 }
 
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 200px;
+}
+
 #carousel-container {
     user-select: none;
     width: 100%;
@@ -482,4 +489,78 @@
 
 audio {
     display: none;
+}
+
+
+
+.stack-container {
+    user-select: none;
+    font-family: 'Handwrite';
+    position: relative;
+    width: 450px;
+    height: 550px;
+}
+
+.folder {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #ffe082 0%, #ffd54f 100%);
+    border: 2px solid #d4a514;
+    border-radius: 10px 10px 4px 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: transform 0.6s ease, z-index 0.6s ease;
+    transform-style: preserve-3d;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+}
+
+.folder .tab {
+    height: 30px;
+    background: #ffca28;
+    border-bottom: 2px solid #d4a514;
+    padding: 5px 15px;
+    font-weight: bold;
+    color: #333;
+    font-size: 26px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.folder-content {
+    flex-grow: 1;
+    display: none;
+    padding: 0px 20px;
+    color: #333;
+    background: #fffde7;
+}
+
+.folder-content p {
+    margin: 0px;
+}
+
+
+.folder.open {
+    transform: rotateX(-100deg);
+    z-index: 100 !important;
+}
+
+.folder.open .folder-content {
+    display: block;
+    animation: reveal 0.6s ease forwards;
+}
+
+@keyframes reveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
