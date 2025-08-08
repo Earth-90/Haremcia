@@ -748,11 +748,47 @@ function updateWheels(state) {
 function renderStack() {
     folders.forEach((folder, i) => {
         const index = (i - topIndex + folders.length) % folders.length;
-        const xOffset = index * 0.1;
-        const rotation = Math.random() * 10 - 5;
+        const xOffset = index * -40;
+        const rotation = index * -1;
         folder.style.zIndex = 10 - index;
-        folder.style.transform = `translateX(${xOffset}px) rotateZ(${rotation}deg)`;
+
+        // Ajouter des attributs data pour stocker les valeurs de base
+        folder.dataset.baseX = xOffset;
+        folder.dataset.baseRotation = rotation;
+
+        updateFolderTransform(folder);
     });
+}
+
+// Nouvelle fonction pour gérer la transformation
+function updateFolderTransform(folder) {
+    const yOffset = folder.matches(':hover') ? -20 : 0;
+    const xOffset = folder.matches(':hover') ? parseFloat(folder.dataset.baseX || 0) - 20 : parseFloat(folder.dataset.baseX || 0);
+    const rotation = folder.matches(':hover') ? parseFloat(folder.dataset.baseRotation || 0) + 2 : parseFloat(folder.dataset.baseRotation || 0);
+
+    folder.style.transform = `translateX(${xOffset}px) translateY(${yOffset}px) rotateZ(${rotation}deg)`;
+}
+
+// Ajouter les écouteurs d'événements pour le survol
+folders.forEach(folder => {
+    folder.addEventListener('mouseenter', () => {
+        updateFolderTransform(folder);
+    });
+
+    folder.addEventListener('mouseleave', () => {
+        updateFolderTransform(folder);
+    });
+});
+
+// Mettre à jour les autres fonctions qui modifient les transformations
+function cycleForward() {
+    folders.unshift(folders.pop());
+    renderStack();
+}
+
+function cycleBackward() {
+    folders.push(folders.shift());
+    renderStack();
 }
 
 function cycleForward() {
@@ -770,14 +806,18 @@ function openFolder(folder) {
         closeFolder(currentOpenFolder);
     }
 
+    // Sauvegarder l'index actuel du dossier
+    const currentZIndex = folder.style.zIndex;
+
     folder.classList.remove('closing');
     folder.classList.add('opening');
     folder.style.zIndex = 100;
+    folder.dataset.savedIndex = currentZIndex; // Sauvegarder l'index
     currentOpenFolder = folder;
-
 
     addCoffeeStains(folder);
 }
+
 
 function closeFolder(folder) {
     folder.classList.remove('opening');
@@ -787,24 +827,25 @@ function closeFolder(folder) {
         folder.querySelectorAll('.coffee-stain').forEach(stain => {
             stain.remove();
         });
-
     }, 400);
 
     setTimeout(() => {
         folder.classList.remove('closing');
-        folder.style.zIndex = 15;
+        // Restaurer l'index sauvegardé
+        folder.style.zIndex = folder.dataset.savedIndex || 15;
+        delete folder.dataset.savedIndex; // Nettoyer la donnée sauvegardée
 
         if (currentOpenFolder === folder) {
             currentOpenFolder = null;
         }
-    }, 800);
+    }, 250);
 }
 
 const COFFEE_STAINS = [
     { image: 'coffee_stain1.png', chance: 50 },
     { image: 'coffee_stain2.png', chance: 5 },
     { image: 'coffee_stain3.png', chance: 20 },
-    { image: 'coffee_stain4.png', chance: 25 } 
+    { image: 'coffee_stain4.png', chance: 25 }
 
 ];
 
