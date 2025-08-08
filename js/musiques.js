@@ -829,7 +829,7 @@ function getRandomCoffeeStainProps() {
         rotation: Math.random() * 360,
         opacity: Math.random() * 0.5 + 0.4,
         scale: Math.random() * 0.6 + 0.5,
-        backgroundImage: `url('/images/musique/${selectedStain}')`
+        backgroundImage: `url('Haremcia/images/musique/${selectedStain}')`
     };
 }
 
