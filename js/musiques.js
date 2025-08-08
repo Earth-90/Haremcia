@@ -738,10 +738,10 @@ function updateWheels(state) {
     });
 }
 
-
 const stack = document.getElementById("stack");
 let folders = Array.from(document.querySelectorAll(".folder"));
 let topIndex = folders.length - 1;
+let currentOpenFolder = null;
 
 function renderStack() {
     folders.forEach((folder, i) => {
@@ -750,18 +750,48 @@ function renderStack() {
         const rotation = index * -1;
         folder.style.zIndex = 10 - index;
         folder.style.transform = `translateY(${yOffset}px) rotateZ(${rotation}deg)`;
-        folder.classList.remove("open");
     });
 }
 
 function cycleForward() {
+    if (currentOpenFolder) closeFolder(currentOpenFolder);
     folders.unshift(folders.pop());
     renderStack();
 }
 
 function cycleBackward() {
+    if (currentOpenFolder) closeFolder(currentOpenFolder);
     folders.push(folders.shift());
     renderStack();
+}
+
+function openFolder(folder) {
+    if (currentOpenFolder && currentOpenFolder !== folder) {
+        closeFolder(currentOpenFolder);
+    }
+
+    folder.classList.remove('closing');
+    folder.classList.add('opening');
+    folder.style.zIndex = 100;
+    currentOpenFolder = folder;
+}
+
+function closeFolder(folder) {
+    folder.classList.remove('opening');
+    folder.classList.add('closing');
+
+    // Attendre que l'animation de fermeture soit terminée (800ms)
+    setTimeout(() => {
+        folder.classList.remove('closing');
+        
+        // Restaurer le z-index d'origine basé sur l'index du dossier
+        const index = folders.length - 1 - Array.from(folders).indexOf(folder);
+        folder.style.zIndex = 10 - index;
+        
+        if (currentOpenFolder === folder) {
+            currentOpenFolder = null;
+        }
+    }, 800); // Correspond à la durée de l'animation dans le CSS
 }
 
 renderStack();
@@ -776,9 +806,26 @@ stack.addEventListener("wheel", (e) => {
 });
 
 folders.forEach(folder => {
-    folder.addEventListener("click", () => {
-        const isOpen = folder.classList.contains("open");
-        folders.forEach(f => f.classList.remove("open"));
-        if (!isOpen) folder.classList.add("open");
+    folder.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        // Vérifier si c'est le dossier du dessus
+        const topFolder = folders[folders.length - 1];
+        if (folder !== topFolder) {
+            return; // Ne rien faire si ce n'est pas le dossier du dessus
+        }
+
+        if (folder.classList.contains('opening')) {
+            closeFolder(folder);
+        } else {
+            openFolder(folder);
+        }
     });
+});
+
+// Fermer le dossier ouvert si on clique à côté
+document.addEventListener("click", (e) => {
+    if (!e.target.closest('.folder') && currentOpenFolder) {
+        closeFolder(currentOpenFolder);
+    }
 });
