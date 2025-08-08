@@ -8,6 +8,11 @@
     src: url("font/KGSimplytheBest.ttf") format('truetype');
 }
 
+@font-face {
+    font-family: 'Handwrite2';
+    src: url("font/SimpleHandmade.ttf") format('truetype');
+}
+
 body {
     overflow-x: hidden;
 }
@@ -512,6 +517,8 @@ audio {
     cursor: pointer;
     transition: transform 0.6s ease, z-index 0.6s ease;
     transform-style: preserve-3d;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .folder-cover {
@@ -519,7 +526,9 @@ audio {
     width: 100%;
     height: 100%;
     background: linear-gradient(to bottom, #ffe082 0%, #ffd54f 100%);
-    border: 2px solid #d4a514;
+    background-image: url("../images/musique/folder.png");
+    background-size: cover;
+    /* border: 2px solid #d4a514; */
     border-radius: 10px 10px 4px 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     transform-style: preserve-3d;
@@ -531,8 +540,8 @@ audio {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: #fffde7;
-    border: 2px solid #d4a514;
+    background: #eeca00;
+    border: 2px solid #d6b600;
     border-radius: 10px 10px 4px 4px;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -542,34 +551,9 @@ audio {
     line-height: 1.6;
 }
 
-.folder-content-left {
-    flex: 1;
-    padding: 6px;
-}
-
-.folder-content-right {
-    flex: 1;
-    padding: 6px;
-    border-left: 2px dotted #d4a514;
-    background: #f9f7e7;
-}
-
-.folder .tab {
-    height: 30px;
-    background: #ffca28;
-    border-bottom: 2px solid #d4a514;
-    padding: 5px 15px;
-    font-weight: bold;
-    color: #333;
-    font-size: 25px;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    display: flex;
-    align-items: center;
-}
-
 .folder-content {
-    font-size: 12px;
+    font-family: "Handwrite";
+    font-size: 11.7px;
     transition: all 0.4s ease 0.4s;
 }
 
@@ -579,6 +563,39 @@ audio {
 
 .folder-content .spacer {
     margin: 10px;
+}
+
+
+.folder-content-left {
+    text-align: center;
+    margin: 5px 0px 5px 10px;
+    flex: 1;
+    padding: 6px;
+    background: #fdfcf2;
+}
+
+.folder-content-right {
+    text-align: center;
+    margin: 5px 10px 5px 0px;
+    flex: 1;
+    padding: 6px;
+    border-left: 2px dotted #d4a514;
+    background: #f9f7e7;
+}
+
+.folder .tab {
+    height: 30%;
+    width: 30px;
+    padding: 15px;
+    font-weight: bold;
+    color: #333;
+    font-size: 25px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    align-items: center;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
 }
 
 .folder.opening .folder-cover {

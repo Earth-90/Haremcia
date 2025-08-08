@@ -808,18 +808,18 @@ stack.addEventListener("wheel", (e) => {
 });
 
 folders.forEach(folder => {
+    // Ajouter l'écouteur sur le folder entier au lieu du folder-cover
     folder.addEventListener("click", (e) => {
-        e.stopPropagation();
-
-        // Vérifier si c'est le dossier du dessus
-        const topFolder = folders[folders.length - 1];
-        if (folder !== topFolder) {
-            return; // Ne rien faire si ce n'est pas le dossier du dessus
+        // Si un dossier est déjà ouvert et que ce n'est pas celui-ci, on le ferme
+        if (currentOpenFolder && currentOpenFolder !== folder) {
+            closeFolder(currentOpenFolder);
         }
 
+        // Si le dossier cliqué est déjà ouvert, on le ferme
         if (folder.classList.contains('opening')) {
             closeFolder(folder);
         } else {
+            // Sinon on l'ouvre
             openFolder(folder);
         }
     });
