@@ -153,41 +153,62 @@ ellipse.main.selected {
   padding-bottom: 8px;
 }
 
-/* Nouvelle modal centrée */
 .circle-modal {
   position: absolute;
   left: 22%;
   background: #181818;
   color: #fff;
   border-radius: 14px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
   padding: 28px 32px 24px 32px;
   min-width: 320px;
-  max-width: 530px;
+  max-width: 450px;
   z-index: 1000;
   display: none;
-  animation: modalIn 0.4s cubic-bezier(.4,2,.6,1) forwards;
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: translate(-50%, -80%) scale(0.95);}
-  to   { opacity: 1; transform: translate(-50%, -60%) scale(1);}
+  animation: modalIn 0.4s cubic-bezier(.4, 2, .6, 1) forwards;
 }
 
 .circle-modal.show {
   display: block;
 }
 
+.circle-modal.hide {
+  animation: modalOut 0.4s cubic-bezier(.4, 0, .6, 1) forwards;
+}
+
 .circle-modal img {
   max-height: 300px;
   border-radius: 10px;
   margin-bottom: 14px;
-  box-shadow: 0 0 10px rgba(255,255,255,0.08);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.08);
 }
 
 .circle-modal h3 {
   margin-top: 0;
-  border-bottom: 1px solid rgba(255,255,255,0.18);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   padding-bottom: 7px;
 }
 
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1);
+  }
+}
+
+@keyframes modalOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -60%) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -80%) scale(0.95);
+  }
+}

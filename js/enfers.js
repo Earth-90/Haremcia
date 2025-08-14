@@ -137,10 +137,12 @@ function showModal(event, index) {
         groups.forEach(g => {
             g.querySelector('ellipse.main').classList.remove('selected');
         });
+        modal.classList.add("hide");
         modal.classList.remove("show");
         setTimeout(() => {
             modal.style.display = "none";
-        }, 300);
+            modal.classList.remove("hide");
+        }, 400);
         return;
     }
 
@@ -186,9 +188,11 @@ window.addEventListener("keydown", (e) => {
     if (e.key === "Escape" && modal.classList.contains("show")) {
         expandedIndex = null;
         updateLayout();
+        modal.classList.add("hide");
         modal.classList.remove("show");
         setTimeout(() => {
             modal.style.display = "none";
-        }, 300);
+            modal.classList.remove("hide");
+        }, 400);
     }
 });
