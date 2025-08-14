@@ -209,8 +209,7 @@ h8 {
 }
 
 .modal img {
-	max-width: 170%;
-	object-fit: contain;
+	max-height: 170%;
 	margin: 0 auto;
 	cursor: pointer;
 }
