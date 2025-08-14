@@ -79,11 +79,9 @@ h5 a:hover {
 	font-weight:bold;
 }
 
-h7 {
+.modal-details {
 	padding-bottom: 25px;
 	font-family: 'MONO';
-	display: flex;
-  flex-direction: column;
 	max-width:750px;
 	color: white;
 	font-size: 20px;

@@ -25,20 +25,25 @@ function openModal(img) {
 	currentIndex = images.indexOf(img);
 }
 
+// Ajouter une variable globale pour suivre l'état d'affichage des détails
+let showDetails = false;
+
 function showCaption(element) {
-	var h6Text = element.querySelector("h6").innerHTML;
-	var modalDetails = document.querySelector(".modal-details");
-	var existingDetails = modalDetails.innerHTML;
+    var h6Text = element.querySelector("h6").innerHTML;
+    var modalDetails = document.querySelector(".modal-details");
+    var existingDetails = modalDetails.innerHTML;
 
-	var paragraph = "<h7>" + h6Text + "</h7>";
+    var paragraph = "<h7>" + h6Text + "</h7>";
 
-	if (existingDetails.includes(paragraph)) {
-		// Le texte est déjà présent, le supprimer
-		modalDetails.innerHTML = existingDetails.replace(paragraph, '');
-	} else {
-		// Le texte n'est pas présent, l'ajouter
-		modalDetails.innerHTML = existingDetails + paragraph;
-	}
+    if (existingDetails.includes(paragraph)) {
+        // Le texte est déjà présent, le supprimer
+        modalDetails.innerHTML = existingDetails.replace(paragraph, '');
+        showDetails = false;
+    } else {
+        // Le texte n'est pas présent, l'ajouter
+        modalDetails.innerHTML = existingDetails + paragraph;
+        showDetails = true;
+    }
 }
 
 function handleKeyDown(event) {
@@ -81,6 +86,14 @@ function showImage(index) {
 
 	modalImg.src = images[index].src;
 	captionText.innerHTML = captions[index].innerHTML;
+
+	// Si les détails étaient affichés, afficher les détails de la nouvelle image
+	if (showDetails) {
+		var newH6 = captions[index].querySelector("h6");
+		if (newH6) {
+			modalDetails.innerHTML = "<h7>" + newH6.innerHTML + "</h7>";
+		}
+	}
 }
 
 function changeImage(imageSrc) {
@@ -91,6 +104,8 @@ function closeModal() {
 	document.querySelector(".modal").style.display = "none";
 	document.body.style.overflow = 'auto';
 	document.querySelector(".modal-details").innerHTML = "";
+	// Réinitialiser l'état des détails
+	showDetails = false;
 }
 
 function lore(element) {
@@ -218,16 +233,26 @@ function includeHTML() {
 	}
 };
 
-// Function to toggle the navigation menu
-function toggleNav() {
-	document.getElementById('nav-bar').classList.toggle('expanded');
-}
+// Attendre que le DOM soit chargé
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to toggle the navigation menu
+    function toggleNav() {
+        document.getElementById('nav-bar').classList.toggle('expanded');
+    }
 
-// Close the menu when the user scrolls
-window.addEventListener('scroll', function () {
-	// If the menu is expanded and the user scrolls, collapse it
-	if (document.getElementById('nav-bar').classList.contains('expanded')) {
-		document.getElementById('nav-bar').classList.remove('expanded');
-	}
+    // Close the menu when the user scrolls
+    window.addEventListener('scroll', function () {
+        // If the menu is expanded and the user scrolls, collapse it
+        const navBar = document.getElementById('nav-bar');
+        if (navBar && navBar.classList.contains('expanded')) {
+            navBar.classList.remove('expanded');
+        }
+    });
+
+    // Ajouter l'événement click sur le bouton de navigation s'il existe
+    const navToggle = document.querySelector('.nav-toggle');
+    if (navToggle) {
+        navToggle.addEventListener('click', toggleNav);
+    }
 });
 
