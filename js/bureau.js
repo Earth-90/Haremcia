@@ -1,18 +1,22 @@
 let currentModal = null;
 let currentArch = null;
 let last_command = '';
+let isTyping = false;
+let messageQueue = [];
+let typingSound = null;
 
 document.getElementById('unlock-btn').addEventListener('click', function () {
     const terminalOutput = document.getElementById('terminal-output');
     const scrollableArea = document.querySelector('.terminal-body');
+    const terminalInput = document.getElementById('terminal-input');
 
     document.getElementById('unlock-btn').classList.add('hidden');
     document.getElementById('terminal').classList.remove('hidden');
-    document.getElementById('terminal-input').focus();
+    terminalInput.focus();
 
-    const audio = new Audio('sons/computer.mp3');
-    console.log('Son joué');
-    audio.play();
+    // Création et configuration du son d'écriture
+    typingSound = new Audio('sons/computer.mp3');
+    typingSound.loop = true;
 
     const messages = [
         "Accessing Terminal.",
@@ -30,18 +34,12 @@ document.getElementById('unlock-btn').addEventListener('click', function () {
         "Please select a log :"
     ];
 
-    let messageIndex = 0;
-    function showNextMessage() {
-        if (messageIndex < messages.length) {
-            typeMessage(messages[messageIndex], terminalOutput, showNextMessage);
-            messageIndex++;
-        }
-    }
-    showNextMessage();
+    messages.forEach(msg => messageQueue.push(msg));
+    processMessageQueue();
 });
 
 document.getElementById('terminal-input').addEventListener('keydown', function (e) {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !isTyping) {
         const command = e.target.value.trim();
         const terminalOutput = document.getElementById('terminal-output');
         const scrollableArea = document.querySelector('.terminal-body');
@@ -49,19 +47,37 @@ document.getElementById('terminal-input').addEventListener('keydown', function (
 
         if (command.startsWith('log_')) {
             if (last_command.startsWith('log_')) {
-                typeMessage(`Closing ${last_command}...`, terminalOutput);
+                messageQueue.push(`Closing ${last_command}...`);
             }
             last_command = command;
-            typeMessage(`Opening ${command}...`, terminalOutput, () => {
-                openLog(command);
-            });
+            messageQueue.push(`Opening ${command}...`);
+            messageQueue.push(() => openLog(command));
         } else {
-            typeMessage(`ERROR [${command}]`, terminalOutput);
+            messageQueue.push(`ERROR [${command}]`);
         }
 
+        processMessageQueue();
         scrollableArea.scrollTop = scrollableArea.scrollHeight;
     }
+    // Empêcher la saisie pendant l'écriture
+    if (isTyping) {
+        e.preventDefault();
+    }
 });
+
+function processMessageQueue() {
+    if (isTyping || messageQueue.length === 0) return;
+
+    const next = messageQueue.shift();
+    if (typeof next === 'function') {
+        next();
+        processMessageQueue();
+    } else {
+        typeMessage(next, document.getElementById('terminal-output'), () => {
+            processMessageQueue();
+        });
+    }
+}
 
 function openLog(modalId) {
     const terminalOutput = document.getElementById('terminal-output');
@@ -113,9 +129,6 @@ closeArchiveBtn.addEventListener('click', () => {
 folderButtons.forEach(button => {
     button.addEventListener('click', function () {
         const archiveId = this.getAttribute('data-archive');
-        typeMessage(`Opening archive ${archiveId}...`, document.getElementById('terminal-output'), () => {
-            OpenArch(archiveId);
-        });
     });
 });
 
@@ -144,6 +157,24 @@ closeContentBtn.addEventListener('click', () => {
 
 // Fonction pour afficher un texte lettre par lettre avec saut de ligne
 function typeMessage(text, outputElement, callback) {
+    isTyping = true;
+    const terminalInput = document.getElementById('terminal-input');
+    terminalInput.disabled = true;
+    
+    // Démarrer le son
+    if (typingSound) {
+        typingSound.currentTime = 0;
+        typingSound.play();
+        
+        // Relancer le son quand il se termine si on est toujours en train d'écrire
+        typingSound.addEventListener('ended', function() {
+            if (isTyping) {
+                typingSound.currentTime = 0;
+                typingSound.play();
+            }
+        });
+    }
+
     let charIndex = 0;
     const intervalId = setInterval(() => {
         if (charIndex < text.length) {
@@ -151,8 +182,17 @@ function typeMessage(text, outputElement, callback) {
             charIndex++;
         } else {
             clearInterval(intervalId);
-            outputElement.innerHTML += '<br>'; // Ajouter un saut de ligne après le message
+            outputElement.innerHTML += '<br>';
+            isTyping = false;
+            terminalInput.disabled = false;
+            
+            // Arrêter le son seulement s'il n'y a pas de callback
+            if (!callback && typingSound) {
+                typingSound.pause();
+                typingSound.currentTime = 0;
+            }
+            
             if (callback) callback();
         }
-    }, 35); // Délai entre chaque caractère
+    }, 35);
 }
