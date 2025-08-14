@@ -233,26 +233,27 @@ function includeHTML() {
 	}
 };
 
-// Attendre que le DOM soit chargé
-document.addEventListener('DOMContentLoaded', function() {
-    // Function to toggle the navigation menu
-    function toggleNav() {
-        document.getElementById('nav-bar').classList.toggle('expanded');
-    }
+// Add this at the top of the file, making toggleNav globally available
+window.toggleNav = function() {
+    document.getElementById('nav-bar').classList.toggle('expanded');
+};
 
-    // Close the menu when the user scrolls
+// Keep your existing DOMContentLoaded event listener
+document.addEventListener('DOMContentLoaded', function() {
+    // Close the menu when the user scrolls 
     window.addEventListener('scroll', function () {
-        // If the menu is expanded and the user scrolls, collapse it
         const navBar = document.getElementById('nav-bar');
         if (navBar && navBar.classList.contains('expanded')) {
             navBar.classList.remove('expanded');
         }
     });
 
-    // Ajouter l'événement click sur le bouton de navigation s'il existe
+    // Attach click handler to nav toggle button if it exists
     const navToggle = document.querySelector('.nav-toggle');
     if (navToggle) {
         navToggle.addEventListener('click', toggleNav);
     }
 });
+
+// ...rest of your existing code...
 
