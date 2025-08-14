@@ -7,6 +7,16 @@
     <link rel="stylesheet" href="css/corrupt.css">
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
+            // Gestion des raccourcis clavier
+            document.addEventListener('keydown', (e) => {
+                // Si la touche Espace ou Échap est pressée
+                if (e.key === ' ' || e.key === 'Escape') {
+                    e.preventDefault(); // Empêche le défilement de la page avec Espace
+                    window.location.href = "enfers.html";
+                }
+            });
+
+            // Animation existante
             setTimeout(() => {
                 document.getElementById('corrupt-gif1').style.display = 'block';
                 setTimeout(() => {

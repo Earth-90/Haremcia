@@ -9,43 +9,43 @@ const cercles = [
         nom: "Orgueil",
         couleur: "red",
         desc: "Le cercle de l'orgueil est là ou sont tous les pêcheurs. Il ne peuvent pas quitter ce cercle.",
-        image: "images/paysage/pride.png"
+        image: "images/paysage/hell_pride.png"
     },
     {
         nom: "Colère",
         couleur: "orange",
         desc: "Le cercle de la colère est un lieu ou les démons font leur propres justice et se livrent à des combats sans fin.",
-        image: "images/paysage/wrath.png"
+        image: "images/paysage/hell_wrath.png"
     },
     {
         nom: "Gourmandise",
         couleur: "yellow",
         desc: "Le cercle de la gourmandise est un lieu de débauche où les démons se livrent à des festins sans fin.",
-        image: "images/paysage/gluttonery.png"
+        image: "images/paysage/hell_gluttonery.png"
     },
     {
         nom: "Avarice",
         couleur: "lime",
         desc: "Le cercle de l'avarice est le cercle ou les enfers produisent toutes les ressources nécessaires à leur fonctionnement.",
-        image: "images/paysage/greed.png"
+        image: "images/paysage/hell_greed.png"
     },
     {
         nom: "Luxure",
         couleur: "cyan",
         desc: "Le cercle de la luxure est rempli de sexclub et nightclub en tous genres.",
-        image: "images/paysage/lust.png"
+        image: "images/paysage/hell_lust.png"
     },
     {
         nom: "Envie",
         couleur: "blue",
-        desc: "LE cercle de l'envie est le seul cercle avec un océans.",
-        image: "images/paysage/envy.png"
+        desc: "Le cercle de l'envie est le seul cercle avec un océan.",
+        image: "images/paysage/hell_envy.png"
     },
     {
         nom: "Paresse",
         couleur: "magenta",
         desc: "Le cercle de la paresse est l'endroit qui gère la population des enfers. Contenant hôpitaux et autres établissements.",
-        image: "images/paysage/sloth.png"
+        image: "images/paysage/hell_sloth.png"
     }
 ];
 
