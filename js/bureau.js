@@ -66,7 +66,14 @@ document.getElementById('terminal-input').addEventListener('keydown', function (
 });
 
 function processMessageQueue() {
-    if (isTyping || messageQueue.length === 0) return;
+    if (isTyping || messageQueue.length === 0) {
+        // Si la file est vide, arrêter le son
+        if (messageQueue.length === 0 && typingSound) {
+            typingSound.pause();
+            typingSound.currentTime = 0;
+        }
+        return;
+    }
 
     const next = messageQueue.shift();
     if (typeof next === 'function') {
@@ -161,18 +168,10 @@ function typeMessage(text, outputElement, callback) {
     const terminalInput = document.getElementById('terminal-input');
     terminalInput.disabled = true;
     
-    // Démarrer le son
-    if (typingSound) {
+    // Démarrer le son seulement s'il n'est pas déjà en cours
+    if (typingSound && typingSound.paused) {
         typingSound.currentTime = 0;
         typingSound.play();
-        
-        // Relancer le son quand il se termine si on est toujours en train d'écrire
-        typingSound.addEventListener('ended', function() {
-            if (isTyping) {
-                typingSound.currentTime = 0;
-                typingSound.play();
-            }
-        });
     }
 
     let charIndex = 0;
@@ -185,12 +184,7 @@ function typeMessage(text, outputElement, callback) {
             outputElement.innerHTML += '<br>';
             isTyping = false;
             terminalInput.disabled = false;
-            
-            // Arrêter le son seulement s'il n'y a pas de callback
-            if (!callback && typingSound) {
-                typingSound.pause();
-                typingSound.currentTime = 0;
-            }
+            console.log(text);
             
             if (callback) callback();
         }
