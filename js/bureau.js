@@ -226,6 +226,7 @@ closeContentBtn.addEventListener('click', () => {
 function typeMessage(text, outputElement, callback) {
     isTyping = true;
     const terminalInput = document.getElementById('terminal-input');
+    const scrollableArea = document.querySelector('.terminal-body');
     terminalInput.disabled = true;
     
     // Démarrer le son seulement s'il n'est pas déjà en cours
@@ -238,13 +239,16 @@ function typeMessage(text, outputElement, callback) {
     const intervalId = setInterval(() => {
         if (charIndex < text.length) {
             outputElement.innerHTML += text.charAt(charIndex);
+            // Faire défiler vers le bas à chaque nouveau caractère
+            scrollableArea.scrollTop = scrollableArea.scrollHeight;
             charIndex++;
         } else {
             clearInterval(intervalId);
             outputElement.innerHTML += '<br>';
             isTyping = false;
             terminalInput.disabled = false;
-            console.log(text);
+            // Faire défiler une dernière fois après le saut de ligne
+            scrollableArea.scrollTop = scrollableArea.scrollHeight;
             
             if (callback) callback();
         }
