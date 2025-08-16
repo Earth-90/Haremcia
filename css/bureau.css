@@ -156,7 +156,11 @@ button:hover {
 }
 
 .folder-btn:hover img {
-    content: url(../images/icons/open_folder.png)
+    content: none;
+}
+
+.folder-btn.opened img {
+    content: url(../images/icons/open_folder.png);
 }
 
 .folder-icon {
@@ -175,6 +179,14 @@ button:hover {
     margin-left: auto;
     margin-right: auto;
     z-index: 1000;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.archive.show {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .archive-content {

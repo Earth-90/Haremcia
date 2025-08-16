@@ -139,23 +139,48 @@ folderButtons.forEach(button => {
     });
 });
 
+// Modifier la fonction OpenArch
 function OpenArch(ArchId) {
+    // Fermer l'archive actuelle
     if (currentArch) {
-        currentArch.classList.add('hidden'); // Fermer l'archive actuelle
+        currentArch.classList.remove('show');
+        currentArch.classList.add('hidden');
+        // Retirer la classe 'opened' du bouton précédent
+        document.querySelector(`.folder-btn[data-archive="${currentArch.id}"]`).classList.remove('opened');
     }
 
     const Arch = document.getElementById(ArchId);
 
     if (Arch) {
+        // Ajouter la classe 'opened' au bouton
+        document.querySelector(`.folder-btn[data-archive="${ArchId}"]`).classList.add('opened');
+        
         Arch.classList.remove('hidden');
-        currentArch = Arch; // Mettre à jour l'archive actuelle
+        // Forcer un reflow pour déclencher l'animation
+        void Arch.offsetWidth;
+        Arch.classList.add('show');
+        
+        currentArch = Arch;
 
         Arch.querySelector('.close').addEventListener('click', function () {
-            Arch.classList.add('hidden');
-            currentArch = null; // Réinitialiser lorsque l'archive est fermée
+            Arch.classList.remove('show');
+            setTimeout(() => {
+                Arch.classList.add('hidden');
+                // Retirer la classe 'opened' du bouton lors de la fermeture
+                document.querySelector(`.folder-btn[data-archive="${ArchId}"]`).classList.remove('opened');
+            }, 300); // Attendre la fin de l'animation
+            currentArch = null;
         });
     }
 }
+
+// Modifier l'événement des boutons de dossier
+folderButtons.forEach(button => {
+    button.addEventListener('click', function() {
+        const archiveId = this.getAttribute('data-archive');
+        OpenArch(archiveId);
+    });
+});
 
 // Fermer l'affichage du contenu de l'archive au clic sur la croix
 closeContentBtn.addEventListener('click', () => {
