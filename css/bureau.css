@@ -33,6 +33,7 @@ button:hover {
 }
 
 #terminal {
+    position: relative;  /* Ajout pour le positionnement du bouton close */
     font-family: 'MONO';
     width: 70%;
     height: 300px;
@@ -50,6 +51,35 @@ button:hover {
     padding-bottom: 10px;
     border-bottom: 2px solid #444;
     color: #0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.terminal-close {
+    color: #0f0;
+    cursor: pointer;
+    font-size: 25px;
+    padding: 0 5px;
+    transition: all 0.4s ease;
+}
+
+.terminal-close:hover {
+    transform: scale(1.2);
+    font-weight: bolder;
+}
+
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+    padding: 5px 0;
+    border-top: 1px solid #0f0;
+    margin-top: 5px;
+}
+
+.terminal-prompt {
+    color: #0f0;
+    margin-right: 10px;
 }
 
 .terminal-body {
@@ -65,11 +95,12 @@ button:hover {
 
 #terminal-input {
     font-family: 'MONO';
-    width: 100%;
+    flex: 1;
     background: none;
     border: none;
     color: #0f0;
     outline: none;
+    font-size: 15px;
 }
 
 .log {

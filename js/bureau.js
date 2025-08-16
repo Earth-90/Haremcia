@@ -11,8 +11,33 @@ document.getElementById('unlock-btn').addEventListener('click', function () {
     const terminalInput = document.getElementById('terminal-input');
 
     document.getElementById('unlock-btn').classList.add('hidden');
-    document.getElementById('terminal').classList.remove('hidden');
-    terminalInput.focus();
+    
+    // Mise à jour de la structure du terminal
+    const terminal = document.getElementById('terminal');
+    terminal.classList.remove('hidden');
+    terminal.innerHTML = `
+        <div class="terminal-header">
+            <span>[TERMINAL]</span>
+            <span class="terminal-close">&times;</span>
+        </div>
+        <div class="terminal-body">
+            <div id="terminal-output"></div>
+            <div class="terminal-input-line">
+                <span class="terminal-prompt">&gt;</span>
+                <input type="text" id="terminal-input" autofocus>
+            </div>
+        </div>
+    `;
+
+    // Récupérer les nouvelles références
+    const newTerminalInput = document.getElementById('terminal-input');
+    newTerminalInput.focus();
+
+    // Ajouter l'événement de fermeture
+    document.querySelector('.terminal-close').addEventListener('click', () => {
+        terminal.classList.add('hidden');
+        document.getElementById('unlock-btn').classList.remove('hidden');
+    });
 
     // Création et configuration du son d'écriture
     typingSound = new Audio('sons/computer.mp3');
@@ -31,19 +56,29 @@ document.getElementById('unlock-btn').addEventListener('click', function () {
         "[LOG ACCESSIBLE]",
         "log_001 | log_002 | log_003 | log_004",
         "log_005 | log_006 | log_███ | log_███",
-        "Please select a log :"
+        "Please select a log :",
+        "Type 'exit' to close terminal"
     ];
 
     messages.forEach(msg => messageQueue.push(msg));
     processMessageQueue();
 });
 
-document.getElementById('terminal-input').addEventListener('keydown', function (e) {
+// Modifier l'événement keydown pour inclure la commande exit
+document.addEventListener('keydown', function (e) {
+    if (e.target.id !== 'terminal-input') return;
+    
     if (e.key === 'Enter' && !isTyping) {
         const command = e.target.value.trim();
         const terminalOutput = document.getElementById('terminal-output');
         const scrollableArea = document.querySelector('.terminal-body');
         e.target.value = '';
+
+        if (command === 'exit') {
+            document.getElementById('terminal').classList.add('hidden');
+            document.getElementById('unlock-btn').classList.remove('hidden');
+            return;
+        }
 
         if (command.startsWith('log_')) {
             if (last_command.startsWith('log_')) {
@@ -59,7 +94,7 @@ document.getElementById('terminal-input').addEventListener('keydown', function (
         processMessageQueue();
         scrollableArea.scrollTop = scrollableArea.scrollHeight;
     }
-    // Empêcher la saisie pendant l'écriture
+    
     if (isTyping) {
         e.preventDefault();
     }
