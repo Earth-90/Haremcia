@@ -31,19 +31,19 @@ const cercles = [
     },
     {
         nom: "Luxure",
-        couleur: "cyan",
+        couleur: "blue",
         desc: "Le cercle de la luxure est rempli de sexclub et nightclub en tous genres.",
         image: "images/paysage/hell_lust.png"
     },
     {
         nom: "Envie",
-        couleur: "blue",
+        couleur: "purple",
         desc: "Le cercle de l'envie est le seul cercle avec un océan.",
         image: "images/paysage/hell_envy.png"
     },
     {
         nom: "Paresse",
-        couleur: "magenta",
+        couleur: "pink",
         desc: "Le cercle de la paresse est l'endroit qui gère la population des enfers. Contenant hôpitaux et autres établissements.",
         image: "images/paysage/hell_sloth.png"
     }
