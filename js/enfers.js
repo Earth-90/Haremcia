@@ -175,7 +175,7 @@ function showModal(event, index) {
     const circleCenterY = ellipseRect.top + ellipseRect.height / 2 + window.scrollY;
 
     // Décalage pour centrer la modal sur le cercle (optionnel)
-    let top = circleCenterY + 100 ;
+    let top = circleCenterY + 100;
     modal.style.top = top + "px";
 
     // Affiche la modal à gauche
@@ -195,4 +195,47 @@ window.addEventListener("keydown", (e) => {
             modal.classList.remove("hide");
         }, 400);
     }
+});
+
+
+document.addEventListener('DOMContentLoaded', (event) => {
+    // Liste des GIFs de corruption disponibles
+    const corruptionGifs = [
+        'images/complex/corrupt1.gif',
+        'images/complex/corrupt2.gif',
+        'images/complex/corrupt3.gif',
+        'images/complex/corrupt4.gif'
+    ];
+
+    // Sélectionner tous les containers de Sinners
+    const sinnerContainers = document.querySelectorAll('.glitch-container');
+
+    // Animation des GIFs pour chaque container
+    function animateCorruption(container) {
+        const overlay = container.querySelector('.corrupt-overlay');
+
+        // Temps aléatoires pour les animations
+        const delay = Math.random() * (2000 - 400) + 400; // Entre 400ms et 2000ms
+        const opacity = Math.random() * (0.8 - 0.2) + 0.2; // Entre 0.2 et 0.8
+
+        // Sélection aléatoire d'un GIF
+        const randomGif = corruptionGifs[Math.floor(Math.random() * corruptionGifs.length)];
+
+        // Application des changements
+        overlay.style.opacity = opacity;
+        overlay.src = randomGif;
+
+        // Planifier la prochaine animation
+        setTimeout(() => {
+            animateCorruption(container);
+        }, delay);
+    }
+
+    // Initialiser l'animation pour chaque container
+    sinnerContainers.forEach((container) => {
+        // Démarrer l'animation avec un délai aléatoire initial
+        setTimeout(() => {
+            animateCorruption(container);
+        }, Math.random() * 1000); // Délai initial aléatoire jusqu'à 1000ms
+    });
 });
