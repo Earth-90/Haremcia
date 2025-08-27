@@ -128,8 +128,15 @@ function playClickSound() {
     playSystemSound(clickSound);
 }
 
-// Mettre à jour la fonction updateCarousel pour gérer les nouveaux conteneurs
+// Modifier la fonction updateCarousel pour gérer la boucle
 function updateCarousel() {
+    // Gérer l'indice en boucle
+    if (currentIndex >= cassettes.length) {
+        currentIndex = 0;
+    } else if (currentIndex < 0) {
+        currentIndex = cassettes.length - 1;
+    }
+
     const offset = -currentIndex * cassetteWidth;
     carouselInner.style.transform = `translateX(${offset}px)`;
 
@@ -150,17 +157,18 @@ function updateCarousel() {
     });
 }
 
-// Gestion du scroll avec la molette
+// Modifier la gestion du scroll avec la molette
 carouselContainer.addEventListener('wheel', (e) => {
     e.preventDefault();
 
     if (isScrolling) return;
     isScrolling = true;
 
+    // Plus besoin de limiter currentIndex avec Math.min/Math.max
     if (e.deltaY > 0) {
-        currentIndex = Math.min(currentIndex + 1, cassettes.length - 1);
+        currentIndex++;
     } else {
-        currentIndex = Math.max(currentIndex - 1, 0);
+        currentIndex--;
     }
 
     updateCarousel();
@@ -569,10 +577,11 @@ carouselContainer.addEventListener('touchend', (e) => {
     const diff = startX - endX;
 
     if (Math.abs(diff) > 50) {
+        // Plus besoin de limiter currentIndex avec Math.min/Math.max
         if (diff > 0) {
-            currentIndex = Math.min(currentIndex + 1, cassettes.length - 1);
+            currentIndex++;
         } else {
-            currentIndex = Math.max(currentIndex - 1, 0);
+            currentIndex--;
         }
         updateCarousel();
     }
