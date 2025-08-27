@@ -148,7 +148,7 @@ function updateCarousel() {
         // Mettre à jour l'échelle du post-it
         const container = cassette.parentElement;
         const postit = container.querySelector('.postit');
-
+        
         if (isCenter) {
             postit.style.transform = `rotate(${postit.style.getPropertyValue('--rotate-angle')}) scale(1.2)`;
         } else {
