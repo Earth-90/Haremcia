@@ -13,6 +13,10 @@
 .centering {
     margin: 10px;
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
 }
 
 button {
@@ -204,7 +208,7 @@ button:hover {
     width: 100%;
     height: 100%;
     background: linear-gradient(to bottom, #ffe082 0%, #ffd54f 100%);
-    background-image: url("../images/musique/folder.png");
+    background-image: url("../images/musique/folder2.png");
     background-size: cover;
     border-radius: 10px 10px 4px 4px;
     transform-style: preserve-3d;
@@ -238,7 +242,7 @@ button:hover {
 
 .folder-content {
     font-family: "Handwrite";
-    font-size: 11.7px;
+    font-size: 11px;
     transition: all 0.4s ease 0.4s;
     position: relative;
 }

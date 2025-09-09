@@ -246,7 +246,7 @@ function openFolder(folder) {
     folder.style.zIndex = 100;
     folder.dataset.savedIndex = currentZIndex;
     currentOpenFolder = folder;
-    addCoffeeStains(folder);
+    //addCoffeeStains(folder);
 }
 
 function closeFolder(folder) {
