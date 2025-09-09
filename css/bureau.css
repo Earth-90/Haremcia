@@ -5,6 +5,11 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: 'Handwrite';
+    src: url("font/KGSimplytheBest.ttf") format('truetype');
+}
+
 .centering {
     margin: 10px;
     text-align: center;
@@ -33,7 +38,7 @@ button:hover {
 }
 
 #terminal {
-    position: relative;  /* Ajout pour le positionnement du bouton close */
+    position: relative;
     font-family: 'MONO';
     width: 70%;
     height: 300px;
@@ -165,68 +170,6 @@ button:hover {
 }
 
 
-.folder-centering {
-    margin-top: 10px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.folder-btn {
-    max-width: 150px;
-    max-height: 130px;
-    gap: 10px;
-    padding: 3px;
-    border-radius: 4px;
-}
-
-.folder-btn:hover {
-    background-color: #303030;
-    transform: scale(1.08);
-}
-
-.folder-btn:hover img {
-    content: none;
-}
-
-.folder-btn.opened img {
-    content: url(../images/icons/open_folder.png);
-}
-
-.folder-icon {
-    max-height: 80%;
-}
-
-/* Style pour l'affichage de l'archive sélectionnée */
-.archive {
-    font-family: 'MONO';
-    width: 75%;
-    background-color: #ffffff;
-    color: #000000;
-    padding: 20px;
-    margin-top: 20px;
-    padding: 10px;
-    margin-left: auto;
-    margin-right: auto;
-    z-index: 1000;
-    opacity: 0;
-    transform: translateY(-20px);
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.archive.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.archive-content {
-    margin-top: 25px;
-    margin-left: 25px;
-    position: relative;
-    text-align: left;
-}
-
 .tampon {
     display: flex;
     flex-direction: row-reverse;
@@ -235,4 +178,138 @@ button:hover {
 
 .tampon img {
     max-width: 200px;
+}
+
+
+.stack-container {
+    position: relative;
+    width: 500px;
+    height: 650px;
+    perspective: 1200px;
+}
+
+.folder {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    transition: transform 0.6s ease, z-index 0.6s ease;
+    transform-style: preserve-3d;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.folder-cover {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, #ffe082 0%, #ffd54f 100%);
+    background-image: url("../images/musique/folder.png");
+    background-size: cover;
+    border-radius: 10px 10px 4px 4px;
+    transform-style: preserve-3d;
+    transform-origin: right center;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.folder-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #eeca00;
+    border-radius: 10px 10px 4px 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    box-sizing: border-box;
+    color: #333;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.coffee-stain {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 25;
+}
+
+.folder-content {
+    font-family: "Handwrite";
+    font-size: 11.7px;
+    transition: all 0.4s ease 0.4s;
+    position: relative;
+}
+
+.folder-content p {
+    margin: 1px;
+}
+
+.folder-content .spacer {
+    margin: 10px;
+}
+
+.folder-content-left {
+    text-align: center;
+    margin: 5px 0px 5px 10px;
+    flex: 1;
+    padding: 6px;
+    background: #fdfcf2;
+}
+
+.folder-content-right {
+    text-align: center;
+    margin: 5px 10px 5px 0px;
+    flex: 1;
+    padding: 6px;
+    border-left: 2px dotted #d4a514;
+    background: #f9f7e7;
+}
+
+.folder .tab {
+    font-family: "MONO";
+    width: 30px;
+    padding: 15px;
+    font-weight: bold;
+    color: #000000;
+    font-size: 25px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    display: flex;
+    align-items: center;
+    writing-mode: vertical-lr;
+    text-orientation: mixed;
+}
+
+.folder.opening .folder-cover {
+    transform: rotateY(160deg);
+}
+
+.folder.closing .folder-cover {
+    transform: rotateY(0deg);
+}
+
+.folder.opening .folder-back {
+    box-shadow:
+        inset 0 0 20px rgba(0, 0, 0, 0.1),
+        10px 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.folder-title {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #d4a514;
+    border-bottom: 2px solid #d4a514;
+    padding-bottom: 10px;
+}
+
+.folder:not(.opening) .folder-cover {
+    pointer-events: auto;
+}
+
+.folder:not(.opening):not(:last-child) .folder-cover {
+    pointer-events: none;
 }

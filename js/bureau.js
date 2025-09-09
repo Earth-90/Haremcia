@@ -168,60 +168,6 @@ closeArchiveBtn.addEventListener('click', () => {
     openArchiveBtn.classList.remove('hidden');
 });
 
-folderButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        const archiveId = this.getAttribute('data-archive');
-    });
-});
-
-// Modifier la fonction OpenArch
-function OpenArch(ArchId) {
-    // Fermer l'archive actuelle
-    if (currentArch) {
-        currentArch.classList.remove('show');
-        currentArch.classList.add('hidden');
-        // Retirer la classe 'opened' du bouton précédent
-        document.querySelector(`.folder-btn[data-archive="${currentArch.id}"]`).classList.remove('opened');
-    }
-
-    const Arch = document.getElementById(ArchId);
-
-    if (Arch) {
-        // Ajouter la classe 'opened' au bouton
-        document.querySelector(`.folder-btn[data-archive="${ArchId}"]`).classList.add('opened');
-        
-        Arch.classList.remove('hidden');
-        // Forcer un reflow pour déclencher l'animation
-        void Arch.offsetWidth;
-        Arch.classList.add('show');
-        
-        currentArch = Arch;
-
-        Arch.querySelector('.close').addEventListener('click', function () {
-            Arch.classList.remove('show');
-            setTimeout(() => {
-                Arch.classList.add('hidden');
-                // Retirer la classe 'opened' du bouton lors de la fermeture
-                document.querySelector(`.folder-btn[data-archive="${ArchId}"]`).classList.remove('opened');
-            }, 300); // Attendre la fin de l'animation
-            currentArch = null;
-        });
-    }
-}
-
-// Modifier l'événement des boutons de dossier
-folderButtons.forEach(button => {
-    button.addEventListener('click', function() {
-        const archiveId = this.getAttribute('data-archive');
-        OpenArch(archiveId);
-    });
-});
-
-// Fermer l'affichage du contenu de l'archive au clic sur la croix
-closeContentBtn.addEventListener('click', () => {
-    selectedArchiveDiv.classList.add('hidden');
-});
-
 // Fonction pour afficher un texte lettre par lettre avec saut de ligne
 function typeMessage(text, outputElement, callback) {
     isTyping = true;
@@ -254,3 +200,163 @@ function typeMessage(text, outputElement, callback) {
         }
     }, 35);
 }
+
+
+const stack = document.getElementById("stack");
+let folders = Array.from(document.querySelectorAll(".folder"));
+let topIndex = Math.floor(Math.random() * folders.length);
+let currentOpenFolder = null;
+
+function renderStack() {
+    folders.forEach((folder, i) => {
+        const index = (i - topIndex + folders.length) % folders.length;
+        const xOffset = index * -40;
+        const rotation = index * -1;
+        folder.style.zIndex = 10 - index;
+        folder.dataset.baseX = xOffset;
+        folder.dataset.baseRotation = rotation;
+        updateFolderTransform(folder);
+    });
+}
+
+function updateFolderTransform(folder) {
+    const yOffset = folder.matches(':hover') ? -20 : 0;
+    const xOffset = folder.matches(':hover') ? parseFloat(folder.dataset.baseX || 0) - 20 : parseFloat(folder.dataset.baseX || 0);
+    const rotation = folder.matches(':hover') ? parseFloat(folder.dataset.baseRotation || 0) + 2 : parseFloat(folder.dataset.baseRotation || 0);
+    folder.style.transform = `translateX(${xOffset}px) translateY(${yOffset}px) rotateZ(${rotation}deg)`;
+}
+
+function cycleForward() {
+    folders.unshift(folders.pop());
+    renderStack();
+}
+
+function cycleBackward() {
+    folders.push(folders.shift());
+    renderStack();
+}
+
+function openFolder(folder) {
+    if (currentOpenFolder && currentOpenFolder !== folder) {
+        closeFolder(currentOpenFolder);
+    }
+    const currentZIndex = folder.style.zIndex;
+    folder.classList.remove('closing');
+    folder.classList.add('opening');
+    folder.style.zIndex = 100;
+    folder.dataset.savedIndex = currentZIndex;
+    currentOpenFolder = folder;
+    addCoffeeStains(folder);
+}
+
+function closeFolder(folder) {
+    folder.classList.remove('opening');
+    folder.classList.add('closing');
+    
+    setTimeout(() => {
+        folder.querySelectorAll('.coffee-stain').forEach(stain => {
+            stain.remove();
+        });
+    }, 400);
+
+    setTimeout(() => {
+        folder.classList.remove('closing');
+        folder.style.zIndex = folder.dataset.savedIndex || 15;
+        delete folder.dataset.savedIndex;
+        if (currentOpenFolder === folder) {
+            currentOpenFolder = null;
+        }
+    }, 250);
+}
+
+const COFFEE_STAINS = [
+    { image: 'coffee_stain1.png', chance: 50 },
+    { image: 'coffee_stain2.png', chance: 5 },
+    { image: 'coffee_stain3.png', chance: 20 },
+    { image: 'coffee_stain4.png', chance: 25 }
+];
+
+function getRandomCoffeeStainProps() {
+    const rand = Math.random() * 100;
+    let cumulativeChance = 0;
+    let selectedStain = COFFEE_STAINS[0].image;
+    
+    for (const stain of COFFEE_STAINS) {
+        cumulativeChance += stain.chance;
+        if (rand <= cumulativeChance) {
+            selectedStain = stain.image;
+            break;
+        }
+    }
+
+    return {
+        top: Math.random() * 80 + '%',
+        left: Math.random() * 50 + '%',
+        rotation: Math.random() * 360,
+        opacity: Math.random() * 0.5 + 0.4,
+        scale: Math.random() * 0.6 + 0.5,
+        backgroundImage: `url('images/musique/${selectedStain}')`
+    };
+}
+
+function addCoffeeStains(folder) {
+    folder.querySelectorAll('.coffee-stain').forEach(stain => stain.remove());
+    
+    const contentContainers = folder.querySelectorAll('.folder-content');
+    contentContainers.forEach(container => {
+        const numStains = Math.floor(Math.random() * 2) + 1;
+        for (let i = 0; i < numStains; i++) {
+            const stain = document.createElement('div');
+            stain.className = 'coffee-stain';
+            const props = getRandomCoffeeStainProps();
+            stain.style.top = props.top;
+            stain.style.left = props.left;
+            stain.style.transform = `rotate(${props.rotation}deg) scale(${props.scale})`;
+            stain.style.opacity = props.opacity;
+            stain.style.backgroundImage = props.backgroundImage;
+            container.appendChild(stain);
+        }
+    });
+}
+
+// Initialisation et gestionnaires d'événements
+renderStack();
+
+stack.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    if (currentOpenFolder) {
+        closeFolder(currentOpenFolder);
+        setTimeout(() => {
+            if (e.deltaY > 0) {
+                cycleForward();
+            } else {
+                cycleBackward();
+            }
+        }, 800);
+    } else {
+        if (e.deltaY > 0) {
+            cycleForward();
+        } else {
+            cycleBackward();
+        }
+    }
+});
+
+folders.forEach(folder => {
+    folder.addEventListener("click", (e) => {
+        if (currentOpenFolder && currentOpenFolder !== folder) {
+            closeFolder(currentOpenFolder);
+        }
+        if (folder.classList.contains('opening')) {
+            closeFolder(folder);
+        } else {
+            openFolder(folder);
+        }
+    });
+});
+
+document.addEventListener("click", (e) => {
+    if (!e.target.closest('.folder') && currentOpenFolder) {
+        closeFolder(currentOpenFolder);
+    }
+});
