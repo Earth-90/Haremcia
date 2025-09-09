@@ -13,6 +13,7 @@ body {
 }
 
 .tableau {
+    user-select: none;
     background-color: gold;
     width: 75%;
     margin: auto;
@@ -37,7 +38,6 @@ th, td {
 }
 
 td:hover {
-    font-style: italic;
     cursor: pointer;
 }
 
@@ -54,22 +54,69 @@ th {
     font-size: 110%;
 }
 
-.allowed {
+.oui {
     background-color: #4caf50;
     text-align:center ;
 }
 
-.not-allowed {
+.non {
     background-color: #f44336;
     text-align:center ;
 }
 
-.not-applicable {
+.non-applicable {
     background-color: #0084ff; 
     text-align:center ;
 }
 
-.variable {
-    background-color: #ff7700; 
+.circonstance {
+    background-color: #f8921d; 
     text-align:center ;
+}
+
+.theorie {
+    background-color: #a239b8; 
+    text-align:center ;
+}
+
+td[title] {
+    position: relative;
+}
+
+td[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 5px;
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+    white-space: nowrap;
+    z-index: 1000;
+    pointer-events: none;
+    animation: tooltipFade 0.3s ease-in-out;
+    opacity: 1;
+}
+
+@keyframes tooltipFade {
+    from {
+        opacity: 0;
+        bottom: 100%;
+    }
+    to {
+        opacity: 1;
+        bottom: 120%;
+    }
+}
+
+td {
+    transition: background-color 0.2s ease-in-out;
+}
+
+td:hover {
+    cursor: pointer;
+    filter: brightness(1.1);
 }

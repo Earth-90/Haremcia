@@ -1,0 +1,27 @@
+Lois,Holy-Reich,Haremcia,G.W.E.,G.E.D.,Royaume Celeste,Complex™
+Magie :,,,,,,
+Magie blanche,O,O,N,N,O,O
+Magie élémentaire,O,O,N,N,C,O
+Magie noire,N,O,N,N,N,O
+Artéfacts magiques,C,C,N,N,N,O
+Technologie :,,,,,,
+Balistique,O,O,O,O,N,O
+Robotique,N,N,N,O,N,O
+Informatique,N,O,N,O,N,O
+Clonage humain,N,N,N,O,N,O
+Intelligence artificielle,N,O,N,O,N,O
+Manipulation génétique,C,O,N,O,N,O
+Transhumanisme,N,O,C,O,O,O
+Social :,,,,,,
+Polygamie,C,C,N,N,N,O
+Egalité des races,O,N,N,Na,O,N
+Mariage inter-racial,O,C,N,Na,O,N
+Travail des enfants,N,N,N,N,O,O
+Caste sociale,N,O,N,O,T,T
+Contrôle des naissances,C,C,N,Na,O,O
+Service militaire obligatoire,O,C,O,Na,N,Na
+Euthanasie,N,O,N,N,O,N
+Juridique :,,,,,,
+Peine capitale,C,O,O,N,N,O
+Torture / Mutilation,N,T,O,N,N,O
+Hérédité des peines,N,N,T,C,N,O
