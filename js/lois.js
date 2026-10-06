@@ -22,7 +22,7 @@ function getClassFromValue(value) {
 // Fonction pour charger le CSV et créer le tableau
 async function loadAndCreateTable() {
     try {
-        const response = await fetch('../data/lois.csv');
+        const response = await fetch('./data/lois.csv');
         const data = await response.text();
         
         // Parsing du CSV
